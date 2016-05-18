@@ -1,4 +1,3 @@
-import pygame
 from assets import *
 
 class SimpleSprite:
@@ -56,23 +55,26 @@ class Cannon(SimpleSprite):
     def move(self, vx):
         self.x += vx
 
-    def shoot(self, bullets):
+    def get_shot(self):
         print('pew!')
         
         x = self.x + self.w / 2 - bullet_img.get_width() / 2
         y = self.y
-        b = Bullet(x, y, -5)
 
-        bullets.append(b)
+        return x, y
             
     def check_screen_edges(self):
         pass
     
+    def process_aliens(self, bombs):
+        pass
+
     def process_bombs(self, bombs):
         pass
     
     def update(self, aliens, bombs):   
         self.check_screen_edges()
+        self.process_aliens(bombs)
         self.process_bombs(bombs)
 
 
