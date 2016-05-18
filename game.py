@@ -31,9 +31,8 @@ CLANK = pygame.mixer.Sound("sounds/clank.ogg")
 THEME = pygame.mixer.Sound("sounds/take_a_chance.ogg")
 
 # Fonts
-font_lg = pygame.font.Font("fonts/joystix monospace.ttf", 70)
-font_sm = pygame.font.Font("fonts/joystix monospace.ttf", 30)
-
+FONT_SM = pygame.font.Font("fonts/joystix monospace.ttf", 30)
+FONT_LG = pygame.font.Font("fonts/joystix monospace.ttf", 70)
 
 
 
@@ -126,7 +125,7 @@ while not done:
                     stage = PLAYING
 
             elif stage == PLAYING:
-                if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
+                if event.key == pygame.K_SPACE:
                     cannon.shoot(bullets)
 
             elif stage == DIE:

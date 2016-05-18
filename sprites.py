@@ -64,9 +64,9 @@ class Cannon(SimpleSprite):
     def shoot(self, bullets):
         print('pew!')
         
-        b = Bullet(0, 0, -5)
-        x = self.x + self.w / 2 - bullet_img.get_width()
-        y = self.h
+        x = self.x + self.w / 2 - bullet_img.get_width() / 2
+        y = self.y
+        b = Bullet(x, y, -5)
 
         bullets.append(b)
             

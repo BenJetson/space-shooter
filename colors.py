@@ -1,3 +1,5 @@
+# Colors
+
 BLACK = (0, 0, 0)
 GREY = (125, 125, 125)
 LIGHT_GREY = (200, 200, 200)
