@@ -181,7 +181,6 @@ while not done:
     bullets = [b for b in bullets if b.alive]
     bombs = [b for b in bombs if b.alive]
 
-    print(len(bullets))
 
 # Close window on quit
 pygame.quit()
