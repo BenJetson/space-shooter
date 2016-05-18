@@ -55,13 +55,14 @@ class Cannon(SimpleSprite):
     def move(self, vx):
         self.x += vx
 
-    def get_shot(self):
+    def shoot(self, bullets, bullet_speed):
         print('pew!')
         
         x = self.x + self.w / 2 - bullet_img.get_width() / 2
         y = self.y
 
-        return x, y
+        b = Bullet(x, y, -bullet_speed)
+        bullets.append(b)
             
     def check_screen_edges(self):
         pass
@@ -93,11 +94,15 @@ class Alien(SimpleSprite):
 
     def process_bullets(self, bullets):
         pass
-    
-    def update(self, bullets):
+
+    def drop_bomb(self, bombs):
+        pass
+
+    def update(self, bullets, bombs):
         self.move()
         self.check_screen_edges()
         self.process_bullets(bullets)
+        self.drop_bomb(bombs)
 
     
 class Bullet(SimpleSprite):

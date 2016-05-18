@@ -4,7 +4,7 @@ pygame.init()
 
 import os
 from assets import BLACK
-from sprites import Cannon, Alien, Bullet, Bomb
+from sprites import Cannon, Alien
 from scenery import Ground, Mountains, Stars
 
 # Initialize game engine
@@ -113,11 +113,7 @@ while not done:
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE:
-                    x, y = cannon.get_shot()
-                    vy = -bullet_speed
-
-                    b = Bullet(x, y, vy)
-                    bullets.append(b)
+                    cannon.shoot(bullets, bullet_speed)
 
             elif stage == DIE:
                 if event.key == pygame.K_SPACE:
@@ -145,7 +141,7 @@ while not done:
         cannon.update(aliens, bombs)
 
         for a in aliens:
-            a.update(bullets)
+            a.update(bullets, bombs)
 
         for b in bullets:
             b.update()
@@ -181,10 +177,9 @@ while not done:
 
 
     # Remove killed objects
-    if stage == PLAYING:
-        aliens = [a for a in aliens if a.alive]
-        bullets = [b for b in bullets if b.alive]
-        bombs = [b for b in bombs if b.alive]
+    aliens = [a for a in aliens if a.alive]
+    bullets = [b for b in bullets if b.alive]
+    bombs = [b for b in bombs if b.alive]
 
     print(len(bullets))
 
