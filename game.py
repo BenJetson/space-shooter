@@ -63,7 +63,6 @@ def start():
 
     setup()
 
-
 def setup():
     global cannon, aliens, bombs, bullets
 
@@ -77,14 +76,12 @@ def setup():
     bombs = []
     bullets = []
 
-
 def get_high_score():
     if os.path.exists(score_file):
         with open(score_file, 'r') as f:
             return max([int(f.read().strip()), default_high_score])
     else:
         return default_high_score
-
 
 def update_high_score():
     if not os.path.exists('data'):
@@ -181,9 +178,9 @@ while not done:
 
     # Remove hit objects
     if stage == PLAYING:
-        aliens = [a for a in aliens if a.alive == True]
-        bullets = [b for b in bullets if b.alive == True]
-        bombs = [b for b in bombs if b.alive == True]
+        aliens = [a for a in aliens if a.alive]
+        bullets = [b for b in bullets if b.alive]
+        bombs = [b for b in bombs if b.alive]
         
 
 # Close window on quit
