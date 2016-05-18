@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from colors import *
+from assets import *
 
 class Ground:
     def __init__(self, x, y, w, h):

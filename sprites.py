@@ -1,10 +1,5 @@
 import pygame
-
-# Images
-cannon_img = pygame.image.load("img/ship.png")
-alien_img = pygame.image.load("img/bug.png")
-bullet_img = pygame.image.load("img/bullet.png")
-bomb_img = pygame.image.load("img/bomb.png")
+from assets import *
 
 class SimpleSprite:
     '''

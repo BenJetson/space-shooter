@@ -1,40 +1,30 @@
 # Imports
 import pygame
+pygame.init()
+
 import os
-from colors import *
+from assets import *
 from sprites import Cannon, Alien, Bullet, Bomb
 from scenery import Ground, Mountains, Stars
-
-
-# Set window position
-os.environ['SDL_VIDEO_WINDOW_POS'] = "15, 30:"
-
 
 # Initialize game engine
 pygame.init()
 
+# Set window position
+os.environ['SDL_VIDEO_WINDOW_POS'] = "15, 30:"
 
-# Window
-SIZE = (1000, 660)
+# Window settings
+WIDTH = 1000
+HEIGHT = 660
 TITLE = "Name of Game"
-screen = pygame.display.set_mode(SIZE)
+
+# Make window
+screen = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption(TITLE)
 
 # Timer
 clock = pygame.time.Clock()
 refresh_rate = 60
-
-# Sounds
-SHOT = pygame.mixer.Sound("sounds/shot.ogg")
-HIT = pygame.mixer.Sound("sounds/hit.ogg")
-CLANK = pygame.mixer.Sound("sounds/clank.ogg")
-THEME = pygame.mixer.Sound("sounds/take_a_chance.ogg")
-
-# Fonts
-FONT_SM = pygame.font.Font("fonts/joystix monospace.ttf", 30)
-FONT_LG = pygame.font.Font("fonts/joystix monospace.ttf", 70)
-
-
 
 # Data
 score_file = "data/scores.txt"
@@ -132,7 +122,7 @@ while not done:
                 if event.key == pygame.K_SPACE:
                     pass
 
-            elif stage == CLEAR and bonus == 0:
+            elif stage == CLEAR:
                 if event.key == pygame.K_SPACE:
                     pass
 
