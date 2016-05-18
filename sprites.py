@@ -115,9 +115,14 @@ class Bullet(SimpleSprite):
 
     def move(self):
         self.y += self.vy
-    
+
+    def check_screen_edges(self):
+        if self.y + self.h < 0:
+            self.alive = False
+
     def update(self):
         self.move()
+        self.check_screen_edges()
 
 
 class Bomb(SimpleSprite):
