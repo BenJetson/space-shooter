@@ -3,6 +3,7 @@ import pygame
 pygame.init()
 
 import os
+import random
 from assets import BLACK
 from sprites import Cannon, Alien
 from scenery import Ground, Mountains, Stars
@@ -44,6 +45,8 @@ cannon_speed = 4
 bullet_speed = 6
 alien_speed = 2
 bomb_speed = 3
+bomb_rate = 5
+
 extra_life_points = 1000 # then at 2000, 4000, 8000, ...
 sound_on = True
 default_high_score = 2000
@@ -113,7 +116,7 @@ while not done:
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE:
-                    cannon.shoot(bullets, bullet_speed)
+                    cannon.shoot(bullets, -bullet_speed)
 
             elif stage == DIE:
                 if event.key == pygame.K_SPACE:
@@ -141,7 +144,11 @@ while not done:
         cannon.update(aliens, bombs)
 
         for a in aliens:
-            a.update(bullets, bombs)
+            a.update(bullets)
+
+            r = random.randint(0, 1000)
+            if r < bomb_rate:
+                a.drop_bomb(bombs, bomb_speed)
 
         for b in bullets:
             b.update()
