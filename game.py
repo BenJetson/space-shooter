@@ -46,6 +46,7 @@ bullet_speed = 6
 alien_speed = 2
 bomb_speed = 3
 bomb_rate = 5
+drop_amount = 10
 
 extra_life_points = 1000 # then at 2000, 4000, 8000, ...
 sound_on = True
@@ -143,12 +144,21 @@ while not done:
     if stage == PLAYING:
         cannon.update(aliens, bombs)
 
+        fleet_hits_edge = False
+
         for a in aliens:
             a.update(bullets)
 
             r = random.randint(0, 1000)
             if r < bomb_rate:
                 a.drop_bomb(bombs, bomb_speed)
+
+            if a.x <= 0 or a.x + a.w >= WIDTH:
+                fleet_hits_edge = True
+
+        if fleet_hits_edge:
+            for a in aliens:
+                a.reverse_and_drop(drop_amount)
 
         for b in bullets:
             b.update()
