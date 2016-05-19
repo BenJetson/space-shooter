@@ -171,7 +171,7 @@ while not done:
         # process cannon
         cannon.update()
 
-        # process aliens
+        # process enemies
         fleet_hits_edge = False
 
         for a in aliens:
@@ -200,7 +200,6 @@ while not done:
         for a in aliens:
             if not a.alive:
                 score += 10
-                print(score)
 
     # Drawing code
     screen.fill(BLACK)
