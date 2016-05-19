@@ -210,6 +210,13 @@ while not done:
             if not a.alive:
                 score += 10
 
+        # check game status
+        if cannon.alive == False:
+            end_game()
+        elif len(aliens) == 0:
+            advance()
+
+
     # Drawing code
     screen.fill(BLACK)
 
@@ -247,14 +254,6 @@ while not done:
     aliens = [a for a in aliens if a.alive]
     bullets = [b for b in bullets if b.alive]
     bombs = [b for b in bombs if b.alive]
-
-    # check cannon kill
-    if cannon.alive == False:
-        stage = GAME_OVER
-
-    # check level clear
-    if len(aliens) == 0:
-        advance()
 
 
 # Close window on quit
