@@ -71,10 +71,8 @@ class Cannon(SimpleSprite):
     def process_bombs(self, bombs):
         pass
     
-    def update(self, aliens, bombs):   
+    def update(self):
         self.check_screen_edges()
-        self.process_aliens(bombs)
-        self.process_bombs(bombs)
 
 
 class Alien(SimpleSprite):
@@ -91,8 +89,8 @@ class Alien(SimpleSprite):
         self.vx *= -1
         self.y += dy
 
-    def process_bullets(self, bullets):
-        pass
+    def kill(self):
+        self.alive = False
 
     def drop_bomb(self, bombs, vy):
         x = self.x + self.w / 2 - bomb_img.get_width() / 2
@@ -103,7 +101,6 @@ class Alien(SimpleSprite):
 
     def update(self, bullets):
         self.move()
-        self.process_bullets(bullets)
 
     
 class Bullet(SimpleSprite):
@@ -117,12 +114,22 @@ class Bullet(SimpleSprite):
     def move(self):
         self.y += self.vy
 
+    def kill(self):
+        self.alive = False
+
     def check_screen_edges(self):
         if self.y + self.h < 0:
             self.alive = False
 
-    def update(self):
+    def process_enemies(self, enemies):
+        for e in enemies:
+            if self.intersects(e):
+                e.kill()
+                self.kill()
+
+    def update(self, enemies):
         self.move()
+        self.process_enemies(enemies)
         self.check_screen_edges()
 
 

@@ -142,7 +142,7 @@ while not done:
 
     # Game logic
     if stage == PLAYING:
-        cannon.update(aliens, bombs)
+        cannon.update()
 
         fleet_hits_edge = False
 
@@ -161,7 +161,7 @@ while not done:
                 a.reverse_and_drop(drop_amount)
 
         for b in bullets:
-            b.update()
+            b.update(aliens)
 
         for b in bombs:
             b.update()
