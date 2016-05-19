@@ -28,7 +28,7 @@ clock = pygame.time.Clock()
 refresh_rate = 60
 
 # Data
-score_file = "data/scores.txt"
+score_file = "data/high_score.txt"
 
 # Stages
 START = 0
@@ -116,6 +116,9 @@ def end_game():
     stage = GAME_OVER
 
 def display_start_screen():
+    pass
+
+def display_pause_screen():
     pass
 
 def display_end_screen():
@@ -223,7 +226,7 @@ while not done:
     if stage == START:
         display_start_screen()
 
-    if stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
+    elif stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
         stars.draw(screen)
         mountains.draw(screen)
         ground.draw(screen)
@@ -239,6 +242,8 @@ while not done:
         for b in bombs:
             b.draw(screen)
 
+    if stage == PAUSED:
+        display_pause_screen()
     if stage == GAME_OVER:
         display_end_screen()
 
