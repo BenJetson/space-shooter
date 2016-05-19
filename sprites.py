@@ -51,6 +51,7 @@ class Cannon(SimpleSprite):
     def reset(self):
         self.x = self.start_x
         self.y = self.start_y
+        self.alive = True
 
     def move(self, vx):
         self.x += vx
@@ -61,15 +62,28 @@ class Cannon(SimpleSprite):
 
         b = Bullet(x, y, vy)
         bullets.append(b)
-            
+
+    def die(self):
+        self.alive = False
+
     def check_screen_edges(self):
         if self.x < 0:
             self.x = 0
         elif self.x + self.w > 1000:
             self.x = 1000 - self.w
 
-    def update(self):
+    def process_enemies(self, aliens):
+        pass
+
+    def process_bombs(self, bombs):
+        for b in bombs:
+            if self.intersects(b):
+                self.die()
+
+    def update(self, aliens, bombs):
         self.check_screen_edges()
+        self.process_enemies(aliens)
+        self.process_bombs(bombs)
 
 
 class Alien(SimpleSprite):
