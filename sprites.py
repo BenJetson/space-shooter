@@ -154,10 +154,12 @@ class Bomb(SimpleSprite):
             self.kill()
             print(cannon.power)
 
-    def process_ground(self, ground):
+    def check_ground(self, ground):
         if self.y > ground.y:
             self.kill()
+            print('boom')
 
     def update(self, cannon, ground):
         self.move()
         self.process_cannon(cannon)
+        self.check_ground(ground)

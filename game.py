@@ -80,6 +80,12 @@ def setup():
     bombs = []
     bullets = []
 
+def advance():
+    global level
+
+    level += 1
+    setup()
+
 def get_high_score():
     if os.path.exists(score_file):
         with open(score_file, 'r') as f:
@@ -170,6 +176,9 @@ while not done:
         if cannon.alive == False:
             stage = GAME_OVER
 
+        # check level clear
+        if len(aliens) == 0:
+            advance()
 
     # Drawing code
 
