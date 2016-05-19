@@ -64,13 +64,7 @@ class Cannon(SimpleSprite):
             
     def check_screen_edges(self):
         pass
-    
-    def process_aliens(self, bombs):
-        pass
 
-    def process_bombs(self, bombs):
-        pass
-    
     def update(self):
         self.check_screen_edges()
 
