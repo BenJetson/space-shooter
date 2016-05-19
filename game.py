@@ -204,6 +204,7 @@ while not done:
             cannon.reset()
             bombs = []
             bullets = []
+            lives -= 1
         else:
             stage = GAME_OVER
 
