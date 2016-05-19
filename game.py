@@ -146,6 +146,7 @@ while not done:
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
                     cannon.shoot(bullets, -bullet_speed)
+                    score -= 1
 
                 elif event.key == pygame.K_p:
                     stage = PAUSED
