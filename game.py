@@ -4,7 +4,7 @@ pygame.init()
 
 import os
 import random
-from assets import BLACK
+from assets import *
 from sprites import Cannon, Alien
 from scenery import Ground, Mountains, Stars
 
