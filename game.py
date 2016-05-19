@@ -57,6 +57,20 @@ ground = Ground(0, 560, 1000, 5)
 mountains = Mountains(0, 480, 1000, 80, 9)
 stars = Stars(0, 0, 1000, 560, 125)
 
+def get_high_score():
+    if os.path.exists(score_file):
+        with open(score_file, 'r') as f:
+            return max([int(f.read().strip()), default_high_score])
+    else:
+        return default_high_score
+
+def update_high_score():
+    if not os.path.exists('data'):
+        os.mkdir('data')
+
+    with open((score_file), 'w') as f:
+        f.write(str(high_score))
+
 def reset():
     global  cannon, alien_speed, bomb_rate, shot_limit, score, level, stage
 
@@ -94,19 +108,10 @@ def advance():
 
     setup()
 
-def get_high_score():
-    if os.path.exists(score_file):
-        with open(score_file, 'r') as f:
-            return max([int(f.read().strip()), default_high_score])
-    else:
-        return default_high_score
+def end_game():
+    global stage
 
-def update_high_score():
-    if not os.path.exists('data'):
-        os.mkdir('data')
-
-    with open((score_file), 'w') as f:
-        f.write(str(high_score))
+    stage = GAME_OVER
 
 def display_start_screen():
     pass
@@ -116,6 +121,7 @@ def display_stats():
 
 def display_end_screen():
     pass
+
 
 # hide mouse cursor over screen
 pygame.mouse.set_visible(0)
