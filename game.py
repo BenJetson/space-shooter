@@ -168,8 +168,10 @@ while not done:
             stage = PLAYING
 
     if stage == PLAYING:
+        # process cannon
         cannon.update()
 
+        # process aliens
         fleet_hits_edge = False
 
         for a in aliens:
@@ -186,12 +188,15 @@ while not done:
             for a in aliens:
                 a.reverse_and_drop(drop_amount)
 
-        for b in bullets:
-            b.update(aliens)
-
+        # process bombs
         for b in bombs:
             b.update(cannon, ground)
 
+        # process bullets
+        for b in bullets:
+            b.update(aliens)
+
+        # update score
         for a in aliens:
             if not a.alive:
                 score += 10
@@ -203,7 +208,7 @@ while not done:
     if stage == START:
         display_start_screen()
 
-    elif stage == PLAYING or stage == PAUSED or stage == DELAY:
+    elif stage in [PLAYING, PAUSED, DELAY]:
         stars.draw(screen)
         mountains.draw(screen)
         ground.draw(screen)
