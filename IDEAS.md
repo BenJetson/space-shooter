@@ -23,7 +23,7 @@
 18. In your own words, explain how it is beneficial to create and extend objects. Compare and contrast this code to previous code you have written in your explanation.
 
 
-## To try...
+## To try... (Point values are in parentheses.)
 
 1. Change the name of the game. (5)
 2. Find your own artwork for the cannon, aliens, bullets, and bombs. (5)
@@ -31,7 +31,7 @@
 4. Create more interesting background scenery during game play. (5)
 5. Edit the display_start_screen() function so that it displays the name of the game along with an interesting backdrop. Make sure it also tells how to start the game. (5)
 6. Edit the display_pause_screen() function so that it indicates that the game is in a paused state and tells how to resume playing. The pause text will overlay game objects, so make sure there is sufficient contrast. (5)
-7. Edit the display_game_stats() function so that it displays the current score, high score, level, and shield strength.
+7. Edit the display_game_stats() function so that it displays the current score, high score, level, and shield strength. (10)
 8. Make the shield display as a bar/meter rather than a number. (10)
 9. Edit the display_end_screen() function so that it says Game Over and tells how to restart. The game over text will be on top of the game objects, so make sure you have sufficient contrast. (5)
 10. Make the shot sound play when a shot is fired.(5)
