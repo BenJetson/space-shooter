@@ -89,9 +89,6 @@ class Alien(SimpleSprite):
         self.vx *= -1
         self.y += dy
 
-    def kill(self):
-        self.alive = False
-
     def drop_bomb(self, bombs, vy):
         x = self.x + self.w / 2 - bomb_img.get_width() / 2
         y = self.y + self.h - bomb_img.get_height()
@@ -112,7 +109,7 @@ class Bullet(SimpleSprite):
 
     def check_screen_edges(self):
         if self.y + self.h < 0:
-            self.alive = False
+            self.kill()
 
     def update(self):
         self.move()
@@ -126,9 +123,6 @@ class Bomb(SimpleSprite):
         
         self.vy = vy
         self.damage = 20
-
-    def move(self):
-        self.y += self.vy
 
     def check_ground(self, ground):
         if self.y > ground.y:
