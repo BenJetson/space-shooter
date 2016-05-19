@@ -116,7 +116,7 @@ while not done:
                     stage = PLAYING
 
             elif stage == PLAYING:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
                     cannon.shoot(bullets, -bullet_speed)
 
             elif stage == DIE:
@@ -200,9 +200,12 @@ while not done:
 
     # check cannon kill
     if cannon.alive == False:
-        cannon.reset()
-        bombs = []
-        bullets = []
+        if lives > 0:
+            cannon.reset()
+            bombs = []
+            bullets = []
+        else:
+            stage = GAME_OVER
 
 # Close window on quit
 pygame.quit()
