@@ -42,11 +42,12 @@ class SimpleSprite:
     
 
 class Cannon(SimpleSprite):
+
     def __init__(self, x, y):
         super().__init__(x, y, cannon_img)
         
         self.alive = True
-        self.power = 100
+        self.shield = 100
 
     def move(self, vx):
         self.x += vx
@@ -65,7 +66,7 @@ class Cannon(SimpleSprite):
             self.x = 1000 - self.w
 
     def check_power(self):
-        if self.power <= 0:
+        if self.shield <= 0:
             self.kill()
 
     def update(self):
@@ -74,6 +75,7 @@ class Cannon(SimpleSprite):
 
 
 class Alien(SimpleSprite):
+
     def __init__(self, x, y, vx):
         super().__init__(x, y, alien_img)
         
@@ -98,6 +100,7 @@ class Alien(SimpleSprite):
 
     
 class Bullet(SimpleSprite):
+
     def __init__(self, x, y, vy):
         super().__init__(x, y, bullet_img)
 
@@ -120,6 +123,7 @@ class Bullet(SimpleSprite):
 
 
 class Bomb(SimpleSprite):
+
     def __init__(self, x, y, vy):
         super().__init__(x, y, bomb_img)
         
@@ -131,9 +135,8 @@ class Bomb(SimpleSprite):
 
     def process_cannon(self, cannon):
         if self.intersects(cannon):
-            cannon.power -= self.damage
+            cannon.shield -= self.damage
             self.kill()
-            print(cannon.power)
 
     def check_ground(self, ground):
         if self.y > ground.y:

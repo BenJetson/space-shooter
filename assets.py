@@ -24,7 +24,6 @@ bomb_img = pygame.image.load("img/bomb.png")
 # Sounds
 SHOT = pygame.mixer.Sound("sounds/shot.ogg")
 HIT = pygame.mixer.Sound("sounds/hit.ogg")
-CLANK = pygame.mixer.Sound("sounds/clank.ogg")
 THEME = pygame.mixer.Sound("sounds/take_a_chance.ogg")
 
 

@@ -86,7 +86,7 @@ def reset():
     setup()
 
 def setup():
-    global aliens, bombs, bullets, stage, delay_ticks
+    global aliens, bombs, bullets, stage, delay_ticks, high_score
 
     a1 = Alien(400, 90, alien_speed)
     a2 = Alien(500, 90, alien_speed)
@@ -98,6 +98,8 @@ def setup():
 
     delay_ticks = 45
     stage = DELAY
+
+    high_score = get_high_score()
 
 def advance():
     global level, alien_speed, bomb_rate
@@ -129,7 +131,6 @@ pygame.mouse.set_visible(0)
 
 # Game loop
 done = False
-high_score = get_high_score()
 reset()
 
 while not done:
@@ -215,7 +216,7 @@ while not done:
     if stage == START:
         display_start_screen()
 
-    elif stage in [PLAYING, PAUSED, DELAY]:
+    if stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
         stars.draw(screen)
         mountains.draw(screen)
         ground.draw(screen)
@@ -231,10 +232,10 @@ while not done:
         for b in bombs:
             b.draw(screen)
 
-    elif stage == GAME_OVER:
+    if stage == GAME_OVER:
         display_end_screen()
 
-    display_stats(score, level, high_score, cannon.power)
+    display_stats(score, level, high_score, cannon.shield)
 
 
     # Update screen
