@@ -8,8 +8,10 @@ WHITE = (255, 255, 255)
 
 
 # Fonts
-FONT_SM = pygame.font.Font("fonts/joystix monospace.ttf", 30)
-FONT_LG = pygame.font.Font("fonts/joystix monospace.ttf", 70)
+FONT_SM = pygame.font.Font("fonts/joystix monospace.ttf", 32)
+FONT_MD = pygame.font.Font("fonts/joystix monospace.ttf", 48)
+FONT_LG = pygame.font.Font("fonts/joystix monospace.ttf", 64)
+FONT_XL = pygame.font.Font("fonts/joystix monospace.ttf", 80)
 
 
 # Images
