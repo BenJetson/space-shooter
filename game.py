@@ -202,16 +202,26 @@ while not done:
 
         # process bombs
         for b in bombs:
-            b.update(cannon, ground)
+            b.update(ground)
+
+            if b.intersects(cannon):
+                b.kill()
+                cannon.apply_damage(20)
 
         # process bullets
         for b in bullets:
-            b.update(aliens)
+            b.update()
+
+            for a in aliens:
+                if b.intersects(a):
+                    b.kill()
+                    a.kill()
+
 
         # update score
         for a in aliens:
             if not a.alive:
-                score += 10
+                score += a.value
 
         # check game status
         if cannon.alive == False:
