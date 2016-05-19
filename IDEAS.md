@@ -25,27 +25,27 @@
 
 ## To try...
 
-1. Come up with a name for the game.
-2. Find your own artwork for the cannon, aliens, bullets, and bombs.
-3. Create many more aliens and arrange them in an interesting formation.
-4. Create more interesting background scenery during game play.
-5. Edit the display_start_screen() function so that it displays the name of the game along with an interesting backdrop. Make sure it also tells how to start the game.
-6. Edit the display_pause_screen() function so that it indicates that the game is in a paused state and tells how to resume playing. The pause text will overlay game objects, so make sure there is sufficient contrast.
+1. Change the name of the game. (5)
+2. Find your own artwork for the cannon, aliens, bullets, and bombs. (5)
+3. Create many more aliens and arrange them in an interesting formation. (5)
+4. Create more interesting background scenery during game play. (5)
+5. Edit the display_start_screen() function so that it displays the name of the game along with an interesting backdrop. Make sure it also tells how to start the game. (5)
+6. Edit the display_pause_screen() function so that it indicates that the game is in a paused state and tells how to resume playing. The pause text will overlay game objects, so make sure there is sufficient contrast. (5)
 7. Edit the display_game_stats() function so that it displays the current score, high score, level, and shield strength.
-8. Make the shield display as a bar/meter rather than a number.
-9. Edit the display_end_screen() function so that it says Game Over and tells how to restart. The game over text will be on top of the game objects, so make sure you have sufficient contrast.
-10. Make the shot sound play when a shot is fired.
-11. Make a hit sound play when an alien is shot.
-12. Make theme music play in a loop when the game starts.
-13. Find your own music to play during the start screen and end screen.
-14. Use a conditional so that sound only plays if sound_on is set to True.
-15. Throughout game play, check to see if the current score is higher than the high score. If it is, update the high score to match the current score. Save the new high score to a data file at the end of the game.
-16. Have a power-up fall from the sky at periodic/random intervals (perhaps once per level). If the cannon collides with the power-up, replenish the shield to 100.
-17. Create a power-up which temporarily raises the shot limit.
-18. Create a power-up which gives the cannon a brief period of invincibility.
-19. Make the game immediately end if an alien touches either the ground or the cannon.
-20. Create a UFO object which flies across the top of the screen. Randomly spawn the UFO at a location far off the screen so that it appears at an unpredictable time. Award more points for shooting the UFO than you do for regular aliens.
-21. Move the 'settings' out of the game.py file and into a settings.json file within a data folder. Then read the settings from the JSON file when the game loads.
-22. Make the game playable with the XBox 360 controller rather than a keyboard.
-23. Write a READ_ME file for the game which includes a backstory, describes the goal of the game, explains the controls, and gives point values/deducions for game events.
-24. Rework the Alien class so it has a power much like the Cannon. Give the Alien a default power of 1. When processing aliens, apply_damage of one. You'll also need to call a check_power function in the Aliens update() which will kill the alien if it reaches a power of zero. Now create a SuperAlien classs which extends Aliend. SuperAliens have a default power of 2 or 3. SuperAliens will take 2-3 shots to kill. Use a different image for SuperAliens. It is not necessary to create a new list of SuperAliens. They will update the same as regular Aliens, so just add them to the aliens list in setup.
+8. Make the shield display as a bar/meter rather than a number. (10)
+9. Edit the display_end_screen() function so that it says Game Over and tells how to restart. The game over text will be on top of the game objects, so make sure you have sufficient contrast. (5)
+10. Make the shot sound play when a shot is fired.(5)
+11. Make a hit sound play when an alien is shot. (5)
+12. Make theme music play in a loop when the game starts. (5)
+13. Find your own music to play during the start screen and end screen. (5)
+14. Use a conditional so that sound only plays if sound_on is set to True. (5)
+15. Throughout game play, check to see if the current score is higher than the high score. If it is, update the high score to match the current score. Save the new high score to a data file at the end of the game. (10)
+16. Have a power-up fall from the sky at periodic/random intervals (perhaps once per level). If the cannon collides with the power-up, replenish the shield to 100. (15)
+17. Create a power-up which temporarily raises the shot limit. (10)
+18. Create a power-up which gives the cannon a brief period of invincibility. (10)
+19. Make the game immediately end if an alien touches either the ground or the cannon. (5)
+20. Create a UFO object which flies across the top of the screen. Randomly spawn the UFO at a location far off the screen so that it appears at an unpredictable time. Award more points for shooting the UFO than you do for regular aliens. (10)
+21. Move the 'settings' out of the game.py file and into a settings.json file within a data folder. Then read the settings from the JSON file when the game loads. (15)
+22. Make the game playable with the XBox 360 controller rather than a keyboard. (15)
+23. Write a READ_ME file for the game which includes a backstory, describes the goal of the game, explains the controls, and gives point values/deducions for game events. (5)
+24. Rework the Alien class so it has a power much like the Cannon. Give the Alien a default power of 1. When processing aliens, apply_damage of one. You'll also need to call a check_power function in the Aliens update() which will kill the alien if it reaches a power of zero. Now create a SuperAlien classs which extends Aliend. SuperAliens have a default power of 2 or 3. SuperAliens will take 2-3 shots to kill. Use a different image for SuperAliens. It is not necessary to create a new list of SuperAliens. They will update the same as regular Aliens, so just add them to the aliens list in setup. (15)
