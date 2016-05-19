@@ -37,34 +37,35 @@ PAUSED = 2
 DELAY = 3
 GAME_OVER = 4
 
-
-# Settings
-shot_limit = 5
-cannon_speed = 4
-bullet_speed = 6
-alien_speed = 2
-bomb_speed = 3
-bomb_rate = 5
-drop_amount = 10
 delay_ticks = 45
 
-extra_life_points = 1000 # then at 2000, 4000, 8000, ...
+# Settings
+cannon_speed = 4
+bullet_speed = 6
+bomb_speed = 3
+drop_amount = 12
+
+initial_shot_limit = 5
+initial_alien_speed = 2
+initial_bomb_rate = 5
+
 sound_on = True
 default_high_score = 2000
 
-# Make cannon
-cannon = Cannon(480, 540)
-
-# Make background objects
+# Make scenery objects
 ground = Ground(0, 560, 1000, 5)
 mountains = Mountains(0, 480, 1000, 80, 9)
 stars = Stars(0, 0, 1000, 560, 125)
 
-def start():
-    global  score, lives, level, stage
+def reset():
+    global  cannon, alien_speed, bomb_rate, shot_limit, score, level, stage
+
+    cannon = Cannon(480, 540)
+    alien_speed = initial_alien_speed
+    bomb_rate = initial_bomb_rate
+    shot_limit = initial_shot_limit
 
     score = 0
-    lives = 3
     level = 1
     stage = START
 
@@ -123,7 +124,7 @@ pygame.mouse.set_visible(0)
 # Game loop
 done = False
 high_score = get_high_score()
-start()
+reset()
 
 while not done:
     # Event processing
@@ -149,7 +150,7 @@ while not done:
 
             elif stage == GAME_OVER:
                 if event.key == pygame.K_r:
-                    start()
+                    reset()
 
     if stage == PLAYING:
         key = pygame.key.get_pressed()

@@ -12,7 +12,15 @@ class SimpleSprite:
         self.img = img
         self.w = img.get_width()
         self.h = img.get_height()
+
+        self.vx = 0
+        self.vy = 0
+
         self.alive = True
+
+    def move(self):
+        self.x += self.vx
+        self.y += self.vy
 
     def kill(self):
         self.alive = False
@@ -48,9 +56,6 @@ class Cannon(SimpleSprite):
         super().__init__(x, y, cannon_img)
         
         self.alive = True
-        self.shot_limit = 3
-        self.start_x = x
-        self.start_y = y
         self.power = 100
 
     def move(self, vx):
@@ -84,9 +89,6 @@ class Alien(SimpleSprite):
         
         self.vx = vx
 
-    def move(self):
-        self.x += self.vx
-        
     def reverse_and_drop(self, dy):
         self.vx *= -1
         self.y += dy
@@ -109,11 +111,7 @@ class Bullet(SimpleSprite):
     def __init__(self, x, y, vy):
         super().__init__(x, y, bullet_img)
 
-        self.vx = 0
         self.vy = vy
-
-    def move(self):
-        self.y += self.vy
 
     def check_screen_edges(self):
         if self.y + self.h < 0:
@@ -135,9 +133,7 @@ class Bomb(SimpleSprite):
     def __init__(self, x, y, vy):
         super().__init__(x, y, bomb_img)
         
-        self.vx = 0
         self.vy = vy
-        self.alive = True
         self.damage = 20
 
     def move(self):
