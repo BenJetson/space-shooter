@@ -192,6 +192,10 @@ while not done:
         for b in bombs:
             b.update(cannon, ground)
 
+        for a in aliens:
+            if not a.alive:
+                score += a.value
+                print(score)
 
     # Drawing code
     screen.fill(BLACK)
