@@ -83,7 +83,6 @@ class Alien(SimpleSprite):
         super().__init__(x, y, alien_img)
         
         self.vx = vx
-        self.value = 10
 
     def move(self):
         self.x += self.vx

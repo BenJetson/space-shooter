@@ -194,7 +194,7 @@ while not done:
 
         for a in aliens:
             if not a.alive:
-                score += a.value
+                score += 10
                 print(score)
 
     # Drawing code
