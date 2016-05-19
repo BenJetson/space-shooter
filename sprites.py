@@ -12,6 +12,10 @@ class SimpleSprite:
         self.img = img
         self.w = img.get_width()
         self.h = img.get_height()
+        self.alive = True
+
+    def kill(self):
+        self.alive = False
 
     def get_rect(self):
         return [self.x, self.y, self.w, self.h]
@@ -47,6 +51,7 @@ class Cannon(SimpleSprite):
         self.shot_limit = 3
         self.start_x = x
         self.start_y = y
+        self.power = 100
 
     def reset(self):
         self.x = self.start_x
@@ -63,27 +68,19 @@ class Cannon(SimpleSprite):
         b = Bullet(x, y, vy)
         bullets.append(b)
 
-    def die(self):
-        self.alive = False
-
     def check_screen_edges(self):
         if self.x < 0:
             self.x = 0
         elif self.x + self.w > 1000:
             self.x = 1000 - self.w
 
-    def process_enemies(self, aliens):
-        pass
+    def check_power(self):
+        if self.power <= 0:
+            self.kill()
 
-    def process_bombs(self, bombs):
-        for b in bombs:
-            if self.intersects(b):
-                self.die()
-
-    def update(self, aliens, bombs):
+    def update(self):
         self.check_screen_edges()
-        self.process_enemies(aliens)
-        self.process_bombs(bombs)
+        self.check_power()
 
 
 class Alien(SimpleSprite):
@@ -91,7 +88,6 @@ class Alien(SimpleSprite):
         super().__init__(x, y, alien_img)
         
         self.vx = vx
-        self.alive = True
 
     def move(self):
         self.x += self.vx
@@ -120,13 +116,9 @@ class Bullet(SimpleSprite):
 
         self.vx = 0
         self.vy = vy
-        self.alive = True
 
     def move(self):
         self.y += self.vy
-
-    def kill(self):
-        self.alive = False
 
     def check_screen_edges(self):
         if self.y + self.h < 0:
@@ -151,9 +143,21 @@ class Bomb(SimpleSprite):
         self.vx = 0
         self.vy = vy
         self.alive = True
+        self.damage = 20
 
     def move(self):
         self.y += self.vy
 
-    def update(self):
+    def process_cannon(self, cannon):
+        if self.intersects(cannon):
+            cannon.power -= self.damage
+            self.kill()
+            print(cannon.power)
+
+    def process_ground(self, ground):
+        if self.y > ground.y:
+            self.kill()
+
+    def update(self, cannon, ground):
         self.move()
+        self.process_cannon(cannon)

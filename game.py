@@ -142,7 +142,7 @@ while not done:
 
     # Game logic
     if stage == PLAYING:
-        cannon.update(aliens, bombs)
+        cannon.update()
 
         fleet_hits_edge = False
 
@@ -164,8 +164,12 @@ while not done:
             b.update(aliens)
 
         for b in bombs:
-            b.update()
-            
+            b.update(cannon, ground)
+
+        # check cannon kill
+        if cannon.alive == False:
+            stage = GAME_OVER
+
 
     # Drawing code
 
@@ -198,15 +202,7 @@ while not done:
     bullets = [b for b in bullets if b.alive]
     bombs = [b for b in bombs if b.alive]
 
-    # check cannon kill
-    if cannon.alive == False:
-        if lives > 0:
-            cannon.reset()
-            bombs = []
-            bullets = []
-            lives -= 1
-        else:
-            stage = GAME_OVER
+
 
 # Close window on quit
 pygame.quit()
