@@ -116,10 +116,10 @@ def end_game():
 def display_start_screen():
     pass
 
-def display_stats():
+def display_end_screen():
     pass
 
-def display_end_screen():
+def display_stats(score, level, high_score, power):
     pass
 
 
@@ -232,6 +232,8 @@ while not done:
 
     elif stage == GAME_OVER:
         display_end_screen()
+
+    display_stats(score, level, high_score, cannon.power)
 
 
     # Update screen
