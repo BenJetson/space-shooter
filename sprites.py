@@ -63,7 +63,10 @@ class Cannon(SimpleSprite):
         bullets.append(b)
             
     def check_screen_edges(self):
-        pass
+        if self.x < 0:
+            self.x = 0
+        elif self.x + self.w > 1000:
+            self.x = 1000 - self.w
 
     def update(self):
         self.check_screen_edges()
