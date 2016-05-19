@@ -53,11 +53,6 @@ class Cannon(SimpleSprite):
         self.start_y = y
         self.power = 100
 
-    def reset(self):
-        self.x = self.start_x
-        self.y = self.start_y
-        self.alive = True
-
     def move(self, vx):
         self.x += vx
 
@@ -157,7 +152,6 @@ class Bomb(SimpleSprite):
     def check_ground(self, ground):
         if self.y > ground.y:
             self.kill()
-            print('boom')
 
     def update(self, cannon, ground):
         self.move()

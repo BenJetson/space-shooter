@@ -34,9 +34,8 @@ score_file = "data/scores.txt"
 START = 0
 PLAYING = 1
 PAUSED = 2
-CLEAR = 3
-DIE = 4
-GAME_OVER = 5
+DELAY = 3
+GAME_OVER = 4
 
 
 # Settings
@@ -47,10 +46,14 @@ alien_speed = 2
 bomb_speed = 3
 bomb_rate = 5
 drop_amount = 10
+delay_ticks = 45
 
 extra_life_points = 1000 # then at 2000, 4000, 8000, ...
 sound_on = True
 default_high_score = 2000
+
+# Make cannon
+cannon = Cannon(480, 540)
 
 # Make background objects
 ground = Ground(0, 560, 1000, 5)
@@ -68,10 +71,8 @@ def start():
     setup()
 
 def setup():
-    global cannon, aliens, bombs, bullets
+    global aliens, bombs, bullets, stage, delay_ticks
 
-    cannon = Cannon(480, 540)
-    
     a1 = Alien(400, 90, alien_speed)
     a2 = Alien(500, 90, alien_speed)
     a3 = Alien(600, 90, alien_speed)
@@ -80,10 +81,16 @@ def setup():
     bombs = []
     bullets = []
 
+    delay_ticks = 45
+    stage = DELAY
+
 def advance():
-    global level
+    global level, alien_speed, bomb_rate
 
     level += 1
+    alien_speed += 0.5
+    bomb_rate += 1
+
     setup()
 
 def get_high_score():
@@ -100,6 +107,14 @@ def update_high_score():
     with open((score_file), 'w') as f:
         f.write(str(high_score))
 
+def display_start_screen():
+    pass
+
+def display_stats():
+    pass
+
+def display_end_screen():
+    pass
 
 # hide mouse cursor over screen
 pygame.mouse.set_visible(0)
@@ -119,19 +134,18 @@ while not done:
         elif event.type == pygame.KEYDOWN:
             if stage == START:
                 if event.key == pygame.K_SPACE:
-                    stage = PLAYING
+                    stage = DELAY
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
                     cannon.shoot(bullets, -bullet_speed)
 
-            elif stage == DIE:
-                if event.key == pygame.K_SPACE:
-                    pass
+                elif event.key == pygame.K_p:
+                    stage = PAUSED
 
-            elif stage == CLEAR:
-                if event.key == pygame.K_SPACE:
-                    pass
+            elif stage == PAUSED:
+                if event.key == pygame.K_p:
+                    stage = PLAYING
 
             elif stage == GAME_OVER:
                 if event.key == pygame.K_r:
@@ -147,6 +161,12 @@ while not done:
 
 
     # Game logic
+    if stage == DELAY:
+        if delay_ticks > 0:
+            delay_ticks -= 1
+        else:
+            stage = PLAYING
+
     if stage == PLAYING:
         cannon.update()
 
@@ -172,33 +192,31 @@ while not done:
         for b in bombs:
             b.update(cannon, ground)
 
-        # check cannon kill
-        if cannon.alive == False:
-            stage = GAME_OVER
-
-        # check level clear
-        if len(aliens) == 0:
-            advance()
 
     # Drawing code
-
-    ''' draw background '''
     screen.fill(BLACK)
-    stars.draw(screen)
-    mountains.draw(screen)
-    ground.draw(screen)
 
-    ''' draw game objects '''
-    cannon.draw(screen)
+    if stage == START:
+        display_start_screen()
 
-    for a in aliens:
-        a.draw(screen)
+    elif stage == PLAYING or stage == PAUSED or stage == DELAY:
+        stars.draw(screen)
+        mountains.draw(screen)
+        ground.draw(screen)
 
-    for b in bullets:
-        b.draw(screen)
+        cannon.draw(screen)
 
-    for b in bombs:
-        b.draw(screen)
+        for a in aliens:
+            a.draw(screen)
+
+        for b in bullets:
+            b.draw(screen)
+
+        for b in bombs:
+            b.draw(screen)
+
+    elif stage == GAME_OVER:
+        display_end_screen()
 
 
     # Update screen
@@ -211,6 +229,13 @@ while not done:
     bullets = [b for b in bullets if b.alive]
     bombs = [b for b in bombs if b.alive]
 
+    # check cannon kill
+    if cannon.alive == False:
+        stage = GAME_OVER
+
+    # check level clear
+    if len(aliens) == 0:
+        advance()
 
 
 # Close window on quit
