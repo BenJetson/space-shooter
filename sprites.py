@@ -31,21 +31,11 @@ class SimpleSprite:
     def intersects(self, other):
         rect1 = self.get_rect()
         rect2 = other.get_rect()
-        
-        left1 = rect1[0]
-        right1 = rect1[0] + rect1[2]
-        top1 = rect1[1]
-        bottom1 = rect1[1] + rect1[3]
 
-        left2 = rect2[0]
-        right2 = rect2[0] + rect2[2]
-        top2 = rect2[1]
-        bottom2 = rect2[1] + rect2[3]
-
-        return not (right1 <= left2 or
-                    left1 >= right2  or
-                    bottom1 <= top2 or
-                    top1 >= bottom2)
+        return not (rect1[0] +  rect1[2] <= rect2[0] or
+                    rect1[0] >= rect2[0] +  rect2[2] or
+                    rect1[1] +  rect1[3] <= rect2[1] or
+                    rect1[1] >= rect2[1] +  rect2[3])
 
     def draw(self, screen):
         screen.blit(self.img, [self.x, self.y])
