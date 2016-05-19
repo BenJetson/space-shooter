@@ -173,7 +173,7 @@ while not done:
         fleet_hits_edge = False
 
         for a in aliens:
-            a.update(bullets)
+            a.update()
 
             r = random.randint(0, 1000)
             if r < bomb_rate:

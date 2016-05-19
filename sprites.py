@@ -101,7 +101,7 @@ class Alien(SimpleSprite):
         b = Bomb(x, y, vy)
         bombs.append(b)
 
-    def update(self, bullets):
+    def update(self):
         self.move()
 
     
