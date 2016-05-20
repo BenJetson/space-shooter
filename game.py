@@ -17,7 +17,6 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "15, 30:"
 # Window settings
 WIDTH = 1000
 HEIGHT = 660
-TITLE = "Protect the Prince"
 
 # Make window
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
@@ -116,10 +115,18 @@ def end_game():
     stage = GAME_OVER
 
 def display_start_screen():
-    pass
+    y_val = HEIGHT/2-100
+
+    for line in start_texts:
+        screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
+        y_val += line.get_height() + 25
 
 def display_pause_screen():
-    pass
+    y_val = HEIGHT/2-100
+
+    for line in pause_texts:
+        screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
+        y_val += line.get_height() + 25
 
 def display_end_screen():
     pass
