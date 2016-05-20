@@ -17,7 +17,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "15, 30:"
 # Window settings
 WIDTH = 1000
 HEIGHT = 660
-TITLE = "Name of Game"
+TITLE = "Protect the Prince"
 
 # Make window
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
