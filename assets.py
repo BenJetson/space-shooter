@@ -8,6 +8,7 @@ GREY = (125, 125, 125)
 LIGHT_GREY = (200, 200, 200)
 WHITE = (255, 255, 255)
 YELLOW = (246, 255, 0)
+RED = (255, 0, 0)
 
 
 # Fonts
@@ -42,3 +43,6 @@ pause_texts = [FONT_MD.render("GAME PAUSED", True, YELLOW),
 
 start_texts = [FONT_MD.render(TITLE, True, YELLOW),
                FONT_SM.render("Press SPACE to start.", True, YELLOW)]
+
+end_texts = [FONT_XL.render("GAME OVER!", True, RED),
+             FONT_MD.render("Press 'r' to restart", True, RED)]
