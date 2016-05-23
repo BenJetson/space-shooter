@@ -10,7 +10,7 @@ pygame.init()
 import os
 import random
 from assets import *
-from sprites import Cannon, Alien, Ground
+from sprites import Fairy, Alien, Ground
 from scenery import Mountains, Stars
 
 

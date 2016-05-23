@@ -55,10 +55,10 @@ class Ground(SimpleSprite):
         pygame.draw.rect(screen, GREY, [self.x, self.y, self.w, self.h])
 
 
-class Cannon(SimpleSprite):
+class Fairy(SimpleSprite):
 
     def __init__(self, x, y):
-        super().__init__(x, y, cannon_img)
+        super().__init__(x, y, fairy_img)
         
         self.alive = True
         self.shield = 100
