@@ -119,26 +119,25 @@ def end_game():
 
 def display_start_screen(screen, high_score):
 
-    y_val = HEIGHT/2-100
-
-    for line in start_texts:
-        screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
-        y_val += line.get_height() + 25
-
+    show_texts_centered(screen, start_texts)
 
 def display_pause_screen(screen):
 
-    y_val = HEIGHT/2-100
-
-    for line in pause_texts:
-        screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
-        y_val += line.get_height() + 25
+    show_texts_centered(screen, pause_texts)
 
 def display_end_screen(screen):
-    pass
+    show_texts_centered(screen, end_texts)
 
 def display_stats(screen, score, level, high_score, shield):
     pass
+
+
+def show_texts_centered(surface, array):
+    y_val = HEIGHT/2-100
+
+    for line in array:
+        screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
+        y_val += line.get_height() + 25
 
 
 # Make scenery objects
