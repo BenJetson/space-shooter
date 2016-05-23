@@ -149,7 +149,7 @@ stars = Stars(0, 0, 1000, 560, 125)
 
 # Get high score
 high_score = read_high_score()
-
+start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW))
 
 # Game loop
 done = False
