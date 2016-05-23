@@ -23,7 +23,13 @@ cannon_img = pygame.image.load("img/ship.png")
 alien_img = pygame.image.load("img/bug.png")
 bullet_img = pygame.image.load("img/bullet.png")
 bomb_img = pygame.image.load("img/bomb.png")
-
+fairy_img = pygame.image.load("img/fairy.png")
+goblin1_img = pygame.image.load("img/goblin1.png")
+goblin2_img = pygame.image.load("img/goblin2.png")
+goblin3_img = pygame.image.load("img/goblin3.png")
+goblin4_img = pygame.image.load("img/goblin4.png")
+goblin5_img = pygame.image.load("img/goblin5.png")
+goblin6_img = pygame.image.load("img/goblin6.png")
 
 # Sounds
 SHOT = pygame.mixer.Sound("sounds/shot.ogg")
