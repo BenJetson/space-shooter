@@ -2,17 +2,6 @@ import random
 
 from assets import *
 
-class Ground:
-    def __init__(self, x, y, w, h):
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, GREY, [self.x, self.y, self.w, self.h])
-
-
 class Stars:
 
     def __init__(self, x, y, w, h, num_stars):
@@ -24,9 +13,17 @@ class Stars:
 
             self.stars.append([a, b])
 
+    def update(self):
+        for s in self.stars:
+            s[1] += 0.25
+
+            if s[1] > 560:
+                s[0] = random.randrange(0, 1000)
+                s[1] = random.randrange(-25, 0)
+
     def draw(self, screen):
         for s in self.stars:
-            pygame.draw.ellipse(screen, WHITE, [s[0], s[1], 2, 2])
+            pygame.draw.ellipse(screen, WHITE, [s[0], s[1], 1, 1])
 
 
 class Mountains:

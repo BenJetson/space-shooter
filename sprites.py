@@ -39,7 +39,21 @@ class SimpleSprite:
 
     def draw(self, screen):
         screen.blit(self.img, [self.x, self.y])
-    
+
+    def update(self):
+        pass
+
+
+class Ground(SimpleSprite):
+    def __init__(self, x, y, w, h):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, GREY, [self.x, self.y, self.w, self.h])
+
 
 class Cannon(SimpleSprite):
 
@@ -48,9 +62,6 @@ class Cannon(SimpleSprite):
         
         self.alive = True
         self.shield = 100
-
-    def move(self, vx):
-        self.x += vx
 
     def shoot(self, bullets, vy):
         x = self.x + self.w / 2 - bullet_img.get_width() / 2
@@ -68,13 +79,14 @@ class Cannon(SimpleSprite):
         elif self.x + self.w > 1000:
             self.x = 1000 - self.w
 
-    def check_power(self):
+    def check_shield(self):
         if self.shield <= 0:
             self.kill()
 
     def update(self):
+        self.move()
         self.check_screen_edges()
-        self.check_power()
+        self.check_shield()
 
 
 class Alien(SimpleSprite):
@@ -107,13 +119,8 @@ class Bullet(SimpleSprite):
 
         self.vy = vy
 
-    def check_screen_edges(self):
-        if self.y + self.h < 0:
-            self.kill()
-
     def update(self):
         self.move()
-        self.check_screen_edges()
 
 
 class Bomb(SimpleSprite):
@@ -124,10 +131,5 @@ class Bomb(SimpleSprite):
         self.vy = vy
         self.damage = 20
 
-    def check_ground(self, ground):
-        if self.y > ground.y:
-            self.kill()
-
-    def update(self, ground):
+    def update(self):
         self.move()
-        self.check_ground(ground)

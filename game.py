@@ -1,33 +1,18 @@
-# Imports
+# Import pygame
 import pygame
-pygame.init()
 
-import os
-import random
-from assets import *
-from sprites import Cannon, Alien
-from scenery import Ground, Mountains, Stars
 
 # Initialize game engine
 pygame.init()
 
-# Set window position
-os.environ['SDL_VIDEO_WINDOW_POS'] = "15, 30:"
 
-# Window settings
-WIDTH = 1000
-HEIGHT = 660
+# More imports
+import os
+import random
+from assets import *
+from sprites import Cannon, Alien, Ground
+from scenery import Mountains, Stars
 
-# Make window
-screen = pygame.display.set_mode([WIDTH, HEIGHT])
-pygame.display.set_caption(TITLE)
-
-# Timer
-clock = pygame.time.Clock()
-refresh_rate = 60
-
-# Data
-score_file = "data/high_score.txt"
 
 # Stages
 START = 0
@@ -36,42 +21,63 @@ PAUSED = 2
 DELAY = 3
 GAME_OVER = 4
 
-delay_ticks = 45
 
-# Settings
+# Window settings
+WIDTH = 1000
+HEIGHT = 660
+
+
+# Play settings
 cannon_speed = 4
-bullet_speed = 6
-bomb_speed = 3
+bullet_speed = 7
+bomb_speed = 5
 drop_amount = 12
 
-initial_shot_limit = 5
+initial_shot_limit = 3
 initial_alien_speed = 2
 initial_bomb_rate = 5
 
 sound_on = True
-default_high_score = 2000
 
-# Make scenery objects
-ground = Ground(0, 560, 1000, 5)
-mountains = Mountains(0, 480, 1000, 80, 9)
-stars = Stars(0, 0, 1000, 560, 125)
 
-def get_high_score():
+# Data settings
+score_file = "data/high_score.txt"
+default_high_score = 1000
+
+
+# Make window
+os.environ['SDL_VIDEO_WINDOW_POS'] = "15, 30:"
+screen = pygame.display.set_mode([WIDTH, HEIGHT])
+pygame.display.set_caption(TITLE)
+
+
+# Hide mouse cursor over screen
+pygame.mouse.set_visible(0)
+
+
+# Timer
+clock = pygame.time.Clock()
+refresh_rate = 60
+delay_ticks = 45
+
+
+# Define functions
+def read_high_score():
     if os.path.exists(score_file):
         with open(score_file, 'r') as f:
             return max([int(f.read().strip()), default_high_score])
     else:
         return default_high_score
 
-def update_high_score():
+def save_high_score(score):
     if not os.path.exists('data'):
         os.mkdir('data')
 
     with open((score_file), 'w') as f:
-        f.write(str(high_score))
+        f.write(str(score))
 
-def reset():
-    global  cannon, alien_speed, bomb_rate, shot_limit, score, level, stage
+def start():
+    global cannon, alien_speed, bomb_rate, shot_limit, score, level, stage
 
     cannon = Cannon(480, 540)
     alien_speed = initial_alien_speed
@@ -82,10 +88,8 @@ def reset():
     level = 1
     stage = START
 
-    setup()
-
 def setup():
-    global aliens, bombs, bullets, stage, delay_ticks, high_score
+    global aliens, bombs, bullets, stage, ticks
 
     a1 = Alien(400, 90, alien_speed)
     a2 = Alien(500, 90, alien_speed)
@@ -95,10 +99,8 @@ def setup():
     bombs = []
     bullets = []
 
-    delay_ticks = 45
+    ticks = delay_ticks
     stage = DELAY
-
-    high_score = get_high_score()
 
 def advance():
     global level, alien_speed, bomb_rate
@@ -114,34 +116,44 @@ def end_game():
 
     stage = GAME_OVER
 
-def display_start_screen():
+
+def display_start_screen(screen, high_score):
+
     y_val = HEIGHT/2-100
 
     for line in start_texts:
         screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
         y_val += line.get_height() + 25
 
-def display_pause_screen():
+
+def display_pause_screen(screen):
+
     y_val = HEIGHT/2-100
 
     for line in pause_texts:
         screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
         y_val += line.get_height() + 25
 
-def display_end_screen():
+def display_end_screen(screen):
     pass
 
-def display_stats(score, level, high_score, power):
+def display_stats(screen, score, level, high_score, shield):
     pass
 
 
-# hide mouse cursor over screen
-pygame.mouse.set_visible(0)
+# Make scenery objects
+ground = Ground(0, 560, 1000, 5)
+mountains = Mountains(0, 480, 1000, 80, 9)
+stars = Stars(0, 0, 1000, 560, 125)
+
+
+# Get high score
+high_score = read_high_score()
 
 
 # Game loop
 done = False
-reset()
+start()
 
 while not done:
     # Event processing
@@ -152,10 +164,11 @@ while not done:
         elif event.type == pygame.KEYDOWN:
             if stage == START:
                 if event.key == pygame.K_SPACE:
-                    stage = DELAY
+                    setup()
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
+                    SHOT.play()
                     cannon.shoot(bullets, -bullet_speed)
                     score -= 1
 
@@ -168,25 +181,30 @@ while not done:
 
             elif stage == GAME_OVER:
                 if event.key == pygame.K_r:
-                    reset()
+                    start()
 
     if stage == PLAYING:
         key = pygame.key.get_pressed()
 
         if key[pygame.K_RIGHT]:
-            cannon.move(cannon_speed)
+            cannon.vx = cannon_speed
         elif key[pygame.K_LEFT]:
-            cannon.move(-cannon_speed)
+            cannon.vx = -cannon_speed
+        else:
+            cannon.vx = 0
 
 
     # Game logic
     if stage == DELAY:
-        if delay_ticks > 0:
-            delay_ticks -= 1
+        if ticks > 0:
+            ticks -= 1
         else:
             stage = PLAYING
 
     if stage == PLAYING:
+        # process scenery
+        stars.update()
+
         # process cannon
         cannon.update()
 
@@ -209,11 +227,13 @@ while not done:
 
         # process bombs
         for b in bombs:
-            b.update(ground)
+            b.update()
 
             if b.intersects(cannon):
                 b.kill()
                 cannon.apply_damage(20)
+            elif b.intersects(ground):
+                b.kill()
 
         # process bullets
         for b in bullets:
@@ -223,12 +243,10 @@ while not done:
                 if b.intersects(a):
                     b.kill()
                     a.kill()
+                    score += a.value
 
-
-        # update score
-        for a in aliens:
-            if not a.alive:
-                score += a.value
+            if b.y + b.h < 0:
+                b.kill()
 
         # check game status
         if cannon.alive == False:
@@ -241,7 +259,7 @@ while not done:
     screen.fill(BLACK)
 
     if stage == START:
-        display_start_screen()
+        display_start_screen(screen, high_score)
 
     elif stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
         stars.draw(screen)
@@ -259,12 +277,12 @@ while not done:
         for b in bombs:
             b.draw(screen)
 
-    if stage == PAUSED:
-        display_pause_screen()
-    if stage == GAME_OVER:
-        display_end_screen()
+        if stage == PAUSED:
+            display_pause_screen(screen)
+        if stage == GAME_OVER:
+            display_end_screen(screen)
 
-    display_stats(score, level, high_score, cannon.shield)
+        display_stats(screen, score, level, high_score, cannon.shield)
 
 
     # Update screen
@@ -273,9 +291,10 @@ while not done:
 
 
     # Remove killed objects
-    aliens = [a for a in aliens if a.alive]
-    bullets = [b for b in bullets if b.alive]
-    bombs = [b for b in bombs if b.alive]
+    if stage != START:
+        aliens = [a for a in aliens if a.alive]
+        bullets = [b for b in bullets if b.alive]
+        bombs = [b for b in bombs if b.alive]
 
 
 # Close window on quit
