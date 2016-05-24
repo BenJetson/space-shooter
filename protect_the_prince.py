@@ -154,6 +154,9 @@ start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW
 done = False
 start()
 
+ctrl_a = 0
+ctrl_a_prevstate = 0
+
 while not done:
     # Event processing
     for event in pygame.event.get():
@@ -185,12 +188,43 @@ while not done:
     if stage == PLAYING:
         key = pygame.key.get_pressed()
 
-        if key[pygame.K_RIGHT]:
+        if key[pygame.K_RIGHT] or controller.left_stick_axes()[0] > 0:
             cannon.vx = cannon_speed
-        elif key[pygame.K_LEFT]:
+        elif key[pygame.K_LEFT] or controller.left_stick_axes()[0] < 0:
             cannon.vx = -cannon_speed
         else:
             cannon.vx = 0
+
+    # Controller Handling
+
+
+    ctrl_a_currstate = controller.a()
+
+    if ctrl_a_currstate != ctrl_a_prevstate:
+        ctrl_a_prevstate = ctrl_a_currstate
+        ctrl_a = ctrl_a_currstate
+
+    if stage == START:
+        if controller.start() == 1:
+            setup()
+
+    elif stage == PLAYING:
+        if ctrl_a == 1 and len(bullets) < shot_limit:
+            SHOT.play()
+            cannon.shoot(bullets, -bullet_speed)
+            score -= 1
+            ctrl_a = 0
+
+        elif controller.back() == 1:
+            stage = PAUSED
+
+    elif stage == PAUSED:
+        if controller.start() == 1:
+            stage = PLAYING
+
+    elif stage == GAME_OVER:
+        if controller.start() == 1:
+            start()
 
 
     # Game logic

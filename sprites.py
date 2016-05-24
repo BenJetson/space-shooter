@@ -1,5 +1,6 @@
 from assets import *
 
+
 class SimpleSprite:
     '''
     Pygame has its own Sprite class, but we'll use a simplified

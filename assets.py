@@ -1,4 +1,7 @@
 import pygame
+from xbox360_controller import XBox360Controller
+
+controller = XBox360Controller(0)
 
 TITLE = "Protect the Prince"
 
