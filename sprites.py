@@ -1,4 +1,5 @@
 from assets import *
+import random
 
 class SimpleSprite:
     '''
@@ -89,10 +90,10 @@ class Fairy(SimpleSprite):
         self.check_shield()
 
 
-class Alien(SimpleSprite):
+class Goblin(SimpleSprite):
 
     def __init__(self, x, y, vx):
-        super().__init__(x, y, alien_img)
+        super().__init__(x, y, random.choice(goblin_img))
         
         self.vx = vx
         self.value = 10
