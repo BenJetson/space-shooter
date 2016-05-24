@@ -10,7 +10,7 @@ pygame.init()
 import os
 import random
 from assets import *
-from sprites import Cannon, Alien, Ground
+from sprites import Fairy, Goblin, Ground
 from scenery import Mountains, Stars
 
 
@@ -77,10 +77,10 @@ def save_high_score(score):
         f.write(str(score))
 
 def start():
-    global cannon, alien_speed, bomb_rate, shot_limit, score, level, stage
+    global fairy, goblin_speed, bomb_rate, shot_limit, score, level, stage
 
-    cannon = Cannon(480, 540)
-    alien_speed = initial_alien_speed
+    fairy = Fairy(480, 540)
+    goblin_speed = initial_alien_speed
     bomb_rate = initial_bomb_rate
     shot_limit = initial_shot_limit
 
@@ -89,12 +89,12 @@ def start():
     stage = START
 
 def setup():
-    global aliens, bombs, bullets, stage, ticks
+    global goblins, bombs, bullets, stage, ticks
 
-    a1 = Alien(400, 90, alien_speed)
-    a2 = Alien(500, 90, alien_speed)
-    a3 = Alien(600, 90, alien_speed)
-    aliens = [a1, a2, a3]
+    g1 = Goblin(400, 90, goblin_speed)
+    g2 = Goblin(500, 90, goblin_speed)
+    g3 = Goblin(600, 90, goblin_speed)
+    goblins = [g1, g2, g3]
     
     bombs = []
     bullets = []
@@ -103,10 +103,10 @@ def setup():
     stage = DELAY
 
 def advance():
-    global level, alien_speed, bomb_rate
+    global level, goblin_speed, bomb_rate
 
     level += 1
-    alien_speed += 0.5
+    goblin_speed += 0.5
     bomb_rate += 1
 
     setup()
@@ -171,7 +171,7 @@ while not done:
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
                     SHOT.play()
-                    cannon.shoot(bullets, -bullet_speed)
+                    fairy.shoot(bullets, -bullet_speed)
                     score -= 1
 
                 elif event.key == pygame.K_p:
@@ -189,11 +189,11 @@ while not done:
         key = pygame.key.get_pressed()
 
         if key[pygame.K_RIGHT] or controller.left_stick_axes()[0] > 0:
-            cannon.vx = cannon_speed
+            fairy.vx = cannon_speed
         elif key[pygame.K_LEFT] or controller.left_stick_axes()[0] < 0:
-            cannon.vx = -cannon_speed
+            fairy.vx = -cannon_speed
         else:
-            cannon.vx = 0
+            fairy.vx = 0
 
     # Controller Handling
 
@@ -211,7 +211,7 @@ while not done:
     elif stage == PLAYING:
         if ctrl_a == 1 and len(bullets) < shot_limit:
             SHOT.play()
-            cannon.shoot(bullets, -bullet_speed)
+            fairy.shoot(bullets, -bullet_speed)
             score -= 1
             ctrl_a = 0
 
@@ -239,32 +239,32 @@ while not done:
         stars.update()
 
         # process cannon
-        cannon.update()
+        fairy.update()
 
         # process enemies
         fleet_hits_edge = False
 
-        for a in aliens:
-            a.update()
+        for g in goblins:
+            g.update()
 
             r = random.randint(0, 1000)
             if r < bomb_rate:
-                a.drop_bomb(bombs, bomb_speed)
+                g.drop_bomb(bombs, bomb_speed)
 
-            if a.x <= 0 or a.x + a.w >= WIDTH:
+            if g.x <= 0 or g.x + g.w >= WIDTH:
                 fleet_hits_edge = True
 
         if fleet_hits_edge:
-            for a in aliens:
-                a.reverse_and_drop(drop_amount)
+            for g in goblins:
+                g.reverse_and_drop(drop_amount)
 
         # process bombs
         for b in bombs:
             b.update()
 
-            if b.intersects(cannon):
+            if b.intersects(fairy):
                 b.kill()
-                cannon.apply_damage(20)
+                fairy.apply_damage(20)
             elif b.intersects(ground):
                 b.kill()
 
@@ -272,19 +272,19 @@ while not done:
         for b in bullets:
             b.update()
 
-            for a in aliens:
-                if b.intersects(a):
+            for g in goblins:
+                if b.intersects(g):
                     b.kill()
-                    a.kill()
-                    score += a.value
+                    g.kill()
+                    score += g.value
 
             if b.y + b.h < 0:
                 b.kill()
 
         # check game status
-        if cannon.alive == False:
+        if fairy.alive == False:
             end_game()
-        elif len(aliens) == 0:
+        elif len(goblins) == 0:
             advance()
 
 
@@ -299,10 +299,10 @@ while not done:
         mountains.draw(screen)
         ground.draw(screen)
 
-        cannon.draw(screen)
+        fairy.draw(screen)
 
-        for a in aliens:
-            a.draw(screen)
+        for g in goblins:
+            g.draw(screen)
 
         for b in bullets:
             b.draw(screen)
@@ -315,7 +315,7 @@ while not done:
         if stage == GAME_OVER:
             display_end_screen(screen)
 
-        display_stats(screen, score, level, high_score, cannon.shield)
+        display_stats(screen, score, level, high_score, fairy.shield)
 
 
     # Update screen
@@ -325,7 +325,7 @@ while not done:
 
     # Remove killed objects
     if stage != START:
-        aliens = [a for a in aliens if a.alive]
+        goblins = [g for g in goblins if g.alive]
         bullets = [b for b in bullets if b.alive]
         bombs = [b for b in bombs if b.alive]
 
