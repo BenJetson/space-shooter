@@ -8,17 +8,7 @@ try:
 except:
     controllerConnected = False
 
-ctrl_a = 0
-ctrl_a_prevstate = 0
 
-def controller_button_fixer():
-    global ctrl_a_prevstate, ctrl_a
-
-    ctrl_a_currstate = controller.a()
-
-    if ctrl_a_currstate != ctrl_a_prevstate:
-        ctrl_a_prevstate = ctrl_a_currstate
-        ctrl_a = ctrl_a_currstate
 
 
 TITLE = "Protect the Prince"
