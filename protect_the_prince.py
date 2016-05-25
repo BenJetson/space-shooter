@@ -109,8 +109,8 @@ def setup():
 
     ticks = delay_ticks
     stage = DELAY
-
-    THEME.play(loops=-1)
+    if sound_on:
+        THEME.play(loops=-1)
 
 def advance():
     global level, goblin_speed, bomb_rate
@@ -124,7 +124,9 @@ def advance():
 def end_game():
     global stage
 
-    THEME.stop()
+    if sound_on:
+        THEME.stop()
+
     stage = GAME_OVER
 
 
@@ -193,7 +195,8 @@ while not done:
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
-                    SHOT.play()
+                    if sound_on:
+                        SHOT.play()
                     fairy.shoot(bullets, -bullet_speed)
                     score -= 1
 
@@ -229,7 +232,8 @@ while not done:
 
         elif stage == PLAYING:
             if ctrl_a == 1 and len(bullets) < shot_limit:
-                SHOT.play()
+                if sound_on:
+                    SHOT.play()
                 fairy.shoot(bullets, -bullet_speed)
                 score -= 1
                 ctrl_a = 0
