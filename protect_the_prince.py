@@ -37,12 +37,12 @@ initial_shot_limit = 3
 initial_alien_speed = 2
 initial_bomb_rate = 5
 
-sound_on = True
+sound_on = False
 
 
 # Data settings
 score_file = "data/high_score.txt"
-default_high_score = 6
+default_high_score = 100
 
 
 # Make window
