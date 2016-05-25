@@ -110,6 +110,8 @@ def setup():
     ticks = delay_ticks
     stage = DELAY
 
+    THEME.play(loops=-1)
+
 def advance():
     global level, goblin_speed, bomb_rate
 
@@ -122,6 +124,7 @@ def advance():
 def end_game():
     global stage
 
+    THEME.stop()
     stage = GAME_OVER
 
 
@@ -299,6 +302,7 @@ while not done:
                     b.kill()
                     g.kill()
                     score += g.value
+                    HIT.play()
 
             if b.y + b.h < 0:
                 b.kill()
