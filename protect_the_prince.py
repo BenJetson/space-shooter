@@ -62,6 +62,14 @@ delay_ticks = 45
 
 
 # Define functions
+
+def show_texts_centered(surface, array, yval_start=HEIGHT/2-100, spacing=25):
+    y_val = yval_start
+
+    for line in array:
+        surface.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
+        y_val += line.get_height() + spacing
+
 def read_high_score():
     if os.path.exists(score_file):
         with open(score_file, 'r') as f:
@@ -129,15 +137,15 @@ def display_end_screen(screen):
     show_texts_centered(screen, end_texts)
 
 def display_stats(screen, score, level, high_score, shield):
-    pass
+    score_text = FONT_SM.render("SCORE: " + str(score), True, YELLOW)
+    level_text = FONT_SM.render("LEVEL:" + str(level), True, YELLOW)
+    high_score_text = FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW)
+    shield_text = FONT_SM.render("SHIELD: " + str(shield), True, YELLOW)
 
+    screen.blit(level_text, [15,15])
+    screen.blit(shield_text, [WIDTH-15-shield_text.get_width(), 15])
+    show_texts_centered(screen, [score_text, high_score_text], 15, 0)
 
-def show_texts_centered(surface, array):
-    y_val = HEIGHT/2-100
-
-    for line in array:
-        screen.blit(line, [screen.get_rect().centerx - int(line.get_width() / 2), y_val])
-        y_val += line.get_height() + 25
 
 
 # Make scenery objects
@@ -154,8 +162,6 @@ start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW
 done = False
 start()
 
-ctrl_a = 0
-ctrl_a_prevstate = 0
 
 while not done:
     # Event processing
@@ -188,44 +194,46 @@ while not done:
     if stage == PLAYING:
         key = pygame.key.get_pressed()
 
-        if key[pygame.K_RIGHT] or controller.left_stick_axes()[0] > 0:
+        if key[pygame.K_RIGHT]:
             fairy.vx = cannon_speed
-        elif key[pygame.K_LEFT] or controller.left_stick_axes()[0] < 0:
+        elif key[pygame.K_LEFT]:
             fairy.vx = -cannon_speed
         else:
             fairy.vx = 0
 
     # Controller Handling
 
+    if controllerConnected:
+        controller_button_fixer()
 
-    ctrl_a_currstate = controller.a()
+        if stage == START:
+            if controller.start() == 1:
+                setup()
 
-    if ctrl_a_currstate != ctrl_a_prevstate:
-        ctrl_a_prevstate = ctrl_a_currstate
-        ctrl_a = ctrl_a_currstate
+        elif stage == PLAYING:
+            if ctrl_a == 1 and len(bullets) < shot_limit:
+                SHOT.play()
+                fairy.shoot(bullets, -bullet_speed)
+                score -= 1
+                ctrl_a = 0
 
-    if stage == START:
-        if controller.start() == 1:
-            setup()
+            elif controller.back() == 1:
+                stage = PAUSED
 
-    elif stage == PLAYING:
-        if ctrl_a == 1 and len(bullets) < shot_limit:
-            SHOT.play()
-            fairy.shoot(bullets, -bullet_speed)
-            score -= 1
-            ctrl_a = 0
+        elif stage == PAUSED:
+            if controller.start() == 1:
+                stage = PLAYING
 
-        elif controller.back() == 1:
-            stage = PAUSED
+        elif stage == GAME_OVER:
+            if controller.start() == 1:
+                start()
 
-    elif stage == PAUSED:
-        if controller.start() == 1:
-            stage = PLAYING
-
-    elif stage == GAME_OVER:
-        if controller.start() == 1:
-            start()
-
+        if controller.left_stick_axes()[0] > 0:
+            fairy.vx = cannon_speed
+        elif controller.left_stick_axes()[0] < 0:
+            fairy.vx = -cannon_speed
+        else:
+            fairy.vx = 0
 
     # Game logic
     if stage == DELAY:
