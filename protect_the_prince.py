@@ -140,6 +140,9 @@ def display_start_screen(screen, high_score):
 
     show_texts_centered(screen, start_texts)
 
+    if not sound_on:
+            screen.blit(mute_img, [screen.get_rect().centerx-(mute_img.get_width()/2), 15])
+
 def display_pause_screen(screen):
 
     show_texts_centered(screen, pause_texts)
@@ -148,16 +151,25 @@ def display_end_screen(screen):
     show_texts_centered(screen, end_texts)
 
 def display_stats(screen, score, level, high_score, shield):
-    score_text = FONT_SM.render("SCORE: " + str(score), True, YELLOW)
-    level_text = FONT_SM.render("LEVEL:" + str(level), True, YELLOW)
-    high_score_text = FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW)
-    shield_text = FONT_SM.render("SHIELD: " + str(shield), True, YELLOW)
+    score_text = FONT_SM.render("SCORE: " + str(score), True, ORANGE)
+    level_text = FONT_SM.render("LEVEL:" + str(level), True, ORANGE)
+    high_score_text = FONT_SM.render("HIGH SCORE: " + str(high_score), True, ORANGE)
+    shield_text = FONT_XS.render("SHIELD:", True, ORANGE)
+    shield_bar = pygame.draw.rect(screen, ORANGE, [WIDTH-15-shield, 15+shield_text.get_height(), shield, 15])
 
     screen.blit(level_text, [15,15])
     screen.blit(shield_text, [WIDTH-15-shield_text.get_width(), 15])
     show_texts_centered(screen, [score_text, high_score_text], 15, 0)
 
+def toggle_sound():
+    global sound_on
 
+    if sound_on:
+        THEME.stop()
+        sound_on = False
+    elif not sound_on:
+        THEME.play(loops=-1)
+        sound_on = True
 
 # Make scenery objects
 ground = Ground(0,560, 1000, 100)
@@ -165,7 +177,7 @@ mountains = Mountains(0, 480, 1000, 80, 9)
 
 # Get high score
 high_score = read_high_score()
-start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW))
+start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, ORANGE))
 
 # Controller Optimization
 
@@ -214,6 +226,9 @@ while not done:
             elif stage == GAME_OVER:
                 if event.key == pygame.K_r:
                     start()
+
+            if event.key == pygame.K_s:
+                toggle_sound()
 
     if stage == PLAYING:
         key = pygame.key.get_pressed()
@@ -309,7 +324,8 @@ while not done:
                     b.kill()
                     g.kill()
                     score += g.value
-                    HIT.play()
+                    if sound_on:
+                        HIT.play()
 
             if b.y + b.h < 0:
                 b.kill()
@@ -336,6 +352,9 @@ while not done:
         ground.draw(screen)
         pygame.draw.ellipse(screen, SUN, [800, 50, 100, 100])
         fairy.draw(screen)
+
+        if not sound_on:
+            screen.blit(mute_img, [screen.get_rect().centerx-(mute_img.get_width()/2)+200, 15])
 
         for g in goblins:
             g.draw(screen)
