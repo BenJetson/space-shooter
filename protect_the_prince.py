@@ -42,7 +42,7 @@ sound_on = True
 
 # Data settings
 score_file = "data/high_score.txt"
-default_high_score = 1000
+default_high_score = 6
 
 
 # Make window
@@ -295,6 +295,10 @@ while not done:
         elif len(goblins) == 0:
             advance()
 
+        if score > high_score:
+            high_score = score
+            save_high_score(score)
+
 
     # Drawing code
     screen.fill(BLACK)
@@ -322,6 +326,8 @@ while not done:
             display_pause_screen(screen)
         if stage == GAME_OVER:
             display_end_screen(screen)
+
+
 
         display_stats(screen, score, level, high_score, fairy.shield)
 

@@ -33,10 +33,10 @@ RED = (255, 0, 0)
 
 
 # Fonts
-FONT_SM = pygame.font.Font("fonts/chary.ttf", 32)
-FONT_MD = pygame.font.Font("fonts/chary.ttf", 48)
-FONT_LG = pygame.font.Font("fonts/chary.ttf", 64)
-FONT_XL = pygame.font.Font("fonts/chary.ttf", 96)
+FONT_SM = pygame.font.Font("fonts/boogaloo.ttf", 32)
+FONT_MD = pygame.font.Font("fonts/boogaloo.ttf", 48)
+FONT_LG = pygame.font.Font("fonts/boogaloo.ttf", 64)
+FONT_XL = pygame.font.Font("fonts/boogaloo.ttf", 96)
 
 
 # Images
@@ -58,11 +58,21 @@ THEME = pygame.mixer.Sound("sounds/take_a_chance.ogg")
 
 
 # Texts
-pause_texts = [FONT_MD.render("GAME PAUSED", True, YELLOW),
-               FONT_SM.render("Press 'p' to resume.", True, YELLOW)]
+if not controllerConnected:
+    pause_texts = [FONT_MD.render("GAME PAUSED", True, YELLOW),
+                   FONT_SM.render("Press 'p' to resume.", True, YELLOW)]
 
-start_texts = [FONT_MD.render(TITLE, True, YELLOW),
-               FONT_SM.render("Press SPACE to start.", True, YELLOW)]
+    start_texts = [FONT_MD.render(TITLE, True, YELLOW),
+                   FONT_SM.render("Press SPACE to start.", True, YELLOW)]
 
-end_texts = [FONT_XL.render("GAME OVER!", True, RED),
-             FONT_MD.render("Press 'r' to restart", True, RED)]
+    end_texts = [FONT_XL.render("GAME OVER!", True, RED),
+                 FONT_MD.render("Press 'r' to restart", True, RED)]
+else:
+    pause_texts = [FONT_MD.render("GAME PAUSED", True, YELLOW),
+                   FONT_SM.render("Press START to resume.", True, YELLOW)]
+
+    start_texts = [FONT_MD.render(TITLE, True, YELLOW),
+                   FONT_SM.render("Press START to start.", True, YELLOW)]
+
+    end_texts = [FONT_XL.render("GAME OVER!", True, RED),
+                 FONT_MD.render("Press START to restart", True, RED)]
