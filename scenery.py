@@ -48,4 +48,6 @@ class Mountains:
 
 
     def draw(self, screen):
-        pygame.draw.polygon(screen, LIGHT_GREY, self.peaks)
+        pygame.draw.polygon(screen, MOUNTAIN_BLUE, self.peaks)
+
+

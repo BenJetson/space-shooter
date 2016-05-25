@@ -54,7 +54,7 @@ class Ground(SimpleSprite):
         self.h = h
 
     def draw(self, screen):
-        pygame.draw.rect(screen, GREY, [self.x, self.y, self.w, self.h])
+        pygame.draw.rect(screen, GREEN, [self.x, self.y, self.w, self.h])
 
 
 class Fairy(SimpleSprite):

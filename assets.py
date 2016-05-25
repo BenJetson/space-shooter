@@ -30,7 +30,10 @@ LIGHT_GREY = (200, 200, 200)
 WHITE = (255, 255, 255)
 YELLOW = (246, 255, 0)
 RED = (255, 0, 0)
-
+GREEN = (144, 219, 24)
+MOUNTAIN_BLUE = (109, 148, 176)
+SKY_BLUE = (19, 216, 242)
+SUN = (244, 252, 0)
 
 # Fonts
 FONT_SM = pygame.font.Font("fonts/chary.ttf", 32)

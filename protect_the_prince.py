@@ -11,7 +11,7 @@ import os
 import random
 from assets import *
 from sprites import Fairy, Goblin, Ground
-from scenery import Mountains, Stars
+from scenery import Mountains
 
 
 # Stages
@@ -99,11 +99,17 @@ def start():
 def setup():
     global goblins, bombs, bullets, stage, ticks
 
-    g1 = Goblin(400, 90, goblin_speed)
-    g2 = Goblin(500, 90, goblin_speed)
-    g3 = Goblin(600, 90, goblin_speed)
-    goblins = [g1, g2, g3]
-    
+    goblins = [Goblin(400, 90, goblin_speed),
+               Goblin(500, 90, goblin_speed),
+               Goblin(600, 90, goblin_speed),
+               Goblin(450, 140, goblin_speed),
+               Goblin(550, 140, goblin_speed),
+               Goblin(400, 190, goblin_speed),
+               Goblin(300, 190, goblin_speed),
+               Goblin(500, 190, goblin_speed),
+               Goblin(600, 190, goblin_speed),
+               Goblin(700, 190, goblin_speed)]
+
     bombs = []
     bullets = []
 
@@ -149,10 +155,8 @@ def display_stats(screen, score, level, high_score, shield):
 
 
 # Make scenery objects
-ground = Ground(0, 560, 1000, 5)
+ground = Ground(0,560, 1000, 100)
 mountains = Mountains(0, 480, 1000, 80, 9)
-stars = Stars(0, 0, 1000, 560, 125)
-
 
 # Get high score
 high_score = read_high_score()
@@ -168,7 +172,7 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        
+
         elif event.type == pygame.KEYDOWN:
             if stage == START:
                 if event.key == pygame.K_SPACE:
@@ -244,7 +248,6 @@ while not done:
 
     if stage == PLAYING:
         # process scenery
-        stars.update()
 
         # process cannon
         fairy.update()
@@ -297,16 +300,15 @@ while not done:
 
 
     # Drawing code
-    screen.fill(BLACK)
+    screen.fill(SKY_BLUE)
 
     if stage == START:
         display_start_screen(screen, high_score)
 
     elif stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
-        stars.draw(screen)
         mountains.draw(screen)
         ground.draw(screen)
-
+        pygame.draw.ellipse(screen, SUN, [800, 50, 100, 100])
         fairy.draw(screen)
 
         for g in goblins:
