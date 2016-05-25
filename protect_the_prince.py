@@ -42,7 +42,7 @@ sound_on = True
 
 # Data settings
 score_file = "data/high_score.txt"
-default_high_score = 1000
+default_high_score = 6
 
 
 # Make window
@@ -115,6 +115,8 @@ def setup():
 
     ticks = delay_ticks
     stage = DELAY
+    if sound_on:
+        THEME.play(loops=-1)
 
 def advance():
     global level, goblin_speed, bomb_rate
@@ -127,6 +129,9 @@ def advance():
 
 def end_game():
     global stage
+
+    if sound_on:
+        THEME.stop()
 
     stage = GAME_OVER
 
@@ -162,6 +167,20 @@ mountains = Mountains(0, 480, 1000, 80, 9)
 high_score = read_high_score()
 start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW))
 
+# Controller Optimization
+
+ctrl_a = 0
+ctrl_a_prevstate = 0
+
+def controller_button_fixer():
+    global ctrl_a_prevstate, ctrl_a
+
+    ctrl_a_currstate = controller.a()
+
+    if ctrl_a_currstate != ctrl_a_prevstate:
+        ctrl_a_prevstate = ctrl_a_currstate
+        ctrl_a = ctrl_a_currstate
+
 # Game loop
 done = False
 start()
@@ -180,7 +199,8 @@ while not done:
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
-                    SHOT.play()
+                    if sound_on:
+                        SHOT.play()
                     fairy.shoot(bullets, -bullet_speed)
                     score -= 1
 
@@ -216,7 +236,8 @@ while not done:
 
         elif stage == PLAYING:
             if ctrl_a == 1 and len(bullets) < shot_limit:
-                SHOT.play()
+                if sound_on:
+                    SHOT.play()
                 fairy.shoot(bullets, -bullet_speed)
                 score -= 1
                 ctrl_a = 0
@@ -288,6 +309,7 @@ while not done:
                     b.kill()
                     g.kill()
                     score += g.value
+                    HIT.play()
 
             if b.y + b.h < 0:
                 b.kill()
@@ -297,6 +319,10 @@ while not done:
             end_game()
         elif len(goblins) == 0:
             advance()
+
+        if score > high_score:
+            high_score = score
+            save_high_score(score)
 
 
     # Drawing code
@@ -324,6 +350,8 @@ while not done:
             display_pause_screen(screen)
         if stage == GAME_OVER:
             display_end_screen(screen)
+
+
 
         display_stats(screen, score, level, high_score, fairy.shield)
 
