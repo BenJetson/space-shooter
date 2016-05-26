@@ -335,6 +335,7 @@ while not done:
         mountains.draw(screen)
         ground.draw(screen)
         pygame.draw.ellipse(screen, SUN, [800, 50, 100, 100])
+        screen.blit(prince_img, [100, 560])
         fairy.draw(screen)
 
         for g in goblins:
