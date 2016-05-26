@@ -10,7 +10,7 @@ pygame.init()
 import os
 import random
 from assets import *
-from sprites import Fairy, Goblin, Ground
+from sprites import Fairy, Goblin, Ground, SpaceShip
 from scenery import Mountains
 
 
@@ -98,7 +98,7 @@ def start():
     stage = START
 
 def setup():
-    global goblins, bombs, bullets, stage, ticks
+    global goblins, bombs, bullets, stage, ticks, level_ufos
 
     goblins = [Goblin(400, 90, goblin_speed),
                Goblin(500, 90, goblin_speed),
@@ -110,6 +110,8 @@ def setup():
                Goblin(500, 190, goblin_speed),
                Goblin(600, 190, goblin_speed),
                Goblin(700, 190, goblin_speed)]
+
+    level_ufos = [SpaceShip()]
 
     bombs = []
     bullets = []
@@ -145,7 +147,8 @@ def draw_centered_mute():
 def display_start_screen(screen, high_score):
 
     show_texts_centered(screen, start_texts)
-    draw_centered_mute()
+    if not sound_on:
+        screen.blit(mute_img, [WIDTH-mute_img.get_width()-25,HEIGHT-mute_img.get_height()-25])
 
 def display_pause_screen(screen):
 
@@ -185,7 +188,7 @@ mountains = Mountains(0, 480, 1000, 80, 9)
 
 # Get high score
 high_score = read_high_score()
-start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, ORANGE))
+start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW))
 
 # Controller Optimization
 
@@ -337,6 +340,9 @@ while not done:
             if g.x <= 0 or g.x + g.w >= WIDTH:
                 fleet_hits_edge = True
 
+        for u in level_ufos:
+            u.update()
+
         if fleet_hits_edge:
             for g in goblins:
                 g.reverse_and_drop(drop_amount)
@@ -363,6 +369,11 @@ while not done:
                     if sound_on:
                         HIT.play()
 
+            for u in level_ufos:
+                if b.intersects(u):
+                    u.kill()
+                    score += u.value
+
             if b.y + b.h < 0:
                 b.kill()
 
@@ -381,6 +392,7 @@ while not done:
     screen.fill(SKY_BLUE)
 
     if stage == START:
+        screen.blit(start_img, [0,0])
         display_start_screen(screen, high_score)
 
     if stage == HELP:
@@ -400,6 +412,9 @@ while not done:
 
         for b in bullets:
             b.draw(screen)
+
+        for u in level_ufos:
+            u.draw(screen)
 
         for b in bombs:
             b.draw(screen)
@@ -424,6 +439,7 @@ while not done:
         goblins = [g for g in goblins if g.alive]
         bullets = [b for b in bullets if b.alive]
         bombs = [b for b in bombs if b.alive]
+        level_ufos = [u for u in level_ufos if u.alive]
 
 
 # Close window on quit

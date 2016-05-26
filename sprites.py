@@ -46,6 +46,25 @@ class SimpleSprite:
         pass
 
 
+class SpaceShip(SimpleSprite):
+    def __init__(self):
+        x = random.randint(2800, 4800)
+        y = random.randint(100, 400)
+
+        super().__init__(x, y, ufo_img)
+
+        self.vx = -1 * random.randint(1, 3)
+        self.value = random.randint(100, 200)
+
+    def check_edge(self):
+        if self.x + self.w < 0:
+            self.kill()
+
+    def update(self):
+        self.move()
+        self.check_edge()
+
+
 class Ground(SimpleSprite):
     def __init__(self, x, y, w, h):
         self.x = x
