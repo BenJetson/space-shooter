@@ -20,6 +20,7 @@ PLAYING = 1
 PAUSED = 2
 DELAY = 3
 GAME_OVER = 4
+HELP  = 5
 
 
 # Window settings
@@ -37,12 +38,12 @@ initial_shot_limit = 3
 initial_alien_speed = 2
 initial_bomb_rate = 5
 
-sound_on = True
+sound_on = False
 
 
 # Data settings
 score_file = "data/high_score.txt"
-default_high_score = 6
+default_high_score = 100
 
 
 # Make window
@@ -136,9 +137,15 @@ def end_game():
     stage = GAME_OVER
 
 
+def draw_centered_mute():
+
+    if not sound_on:
+        screen.blit(mute_img, [screen.get_rect().centerx-(mute_img.get_width()/2), 15])
+
 def display_start_screen(screen, high_score):
 
     show_texts_centered(screen, start_texts)
+    draw_centered_mute()
 
 def display_pause_screen(screen):
 
@@ -147,17 +154,30 @@ def display_pause_screen(screen):
 def display_end_screen(screen):
     show_texts_centered(screen, end_texts)
 
+def display_help_screen(screen):
+    show_texts_centered(screen, help_texts, yval_start=50, spacing=0)
+    draw_centered_mute()
+
 def display_stats(screen, score, level, high_score, shield):
-    score_text = FONT_SM.render("SCORE: " + str(score), True, YELLOW)
-    level_text = FONT_SM.render("LEVEL:" + str(level), True, YELLOW)
-    high_score_text = FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW)
-    shield_text = FONT_SM.render("SHIELD: " + str(shield), True, YELLOW)
+    score_text = FONT_SM.render("SCORE: " + str(score), True, ORANGE)
+    level_text = FONT_SM.render("LEVEL:" + str(level), True, ORANGE)
+    high_score_text = FONT_SM.render("HIGH SCORE: " + str(high_score), True, ORANGE)
+    shield_text = FONT_XS.render("SHIELD:", True, ORANGE)
+    shield_bar = pygame.draw.rect(screen, ORANGE, [WIDTH-15-shield, 15+shield_text.get_height(), shield, 15])
 
     screen.blit(level_text, [15,15])
     screen.blit(shield_text, [WIDTH-15-shield_text.get_width(), 15])
     show_texts_centered(screen, [score_text, high_score_text], 15, 0)
 
+def toggle_sound():
+    global sound_on
 
+    if sound_on:
+        THEME.stop()
+        sound_on = False
+    elif not sound_on:
+        THEME.play(loops=-1)
+        sound_on = True
 
 # Make scenery objects
 ground = Ground(0,560, 1000, 100)
@@ -165,21 +185,31 @@ mountains = Mountains(0, 480, 1000, 80, 9)
 
 # Get high score
 high_score = read_high_score()
-start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, YELLOW))
+start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, ORANGE))
 
 # Controller Optimization
 
 ctrl_a = 0
 ctrl_a_prevstate = 0
+ctrl_x = 0
+ctrl_x_prevstate = 0
 
 def controller_button_fixer():
-    global ctrl_a_prevstate, ctrl_a
+    global ctrl_a_prevstate, ctrl_a, ctrl_x_prevstate, ctrl_x
 
     ctrl_a_currstate = controller.a()
 
     if ctrl_a_currstate != ctrl_a_prevstate:
         ctrl_a_prevstate = ctrl_a_currstate
         ctrl_a = ctrl_a_currstate
+
+    ctrl_x_currstate = controller.x()
+
+    if ctrl_x_currstate != ctrl_x_prevstate:
+        ctrl_x_prevstate = ctrl_x_currstate
+        ctrl_x = ctrl_x_currstate
+
+
 
 # Game loop
 done = False
@@ -196,6 +226,13 @@ while not done:
             if stage == START:
                 if event.key == pygame.K_SPACE:
                     setup()
+
+                if event.key == pygame.K_h:
+                    stage = HELP
+
+            elif stage == HELP:
+                if event.key == pygame.K_SPACE:
+                    stage = START
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
@@ -215,6 +252,9 @@ while not done:
                 if event.key == pygame.K_r:
                     start()
 
+            if event.key == pygame.K_s:
+                toggle_sound()
+
     if stage == PLAYING:
         key = pygame.key.get_pressed()
 
@@ -230,9 +270,20 @@ while not done:
     if controllerConnected:
         controller_button_fixer()
 
+        if ctrl_x == 1:
+            toggle_sound()
+            ctrl_x = 0
+
         if stage == START:
             if controller.start() == 1:
                 setup()
+
+            if controller.y() == 1:
+                stage = HELP
+
+        elif stage == HELP:
+            if controller.back() == 1:
+                stage = START
 
         elif stage == PLAYING:
             if ctrl_a == 1 and len(bullets) < shot_limit:
@@ -309,7 +360,8 @@ while not done:
                     b.kill()
                     g.kill()
                     score += g.value
-                    HIT.play()
+                    if sound_on:
+                        HIT.play()
 
             if b.y + b.h < 0:
                 b.kill()
@@ -331,12 +383,18 @@ while not done:
     if stage == START:
         display_start_screen(screen, high_score)
 
+    if stage == HELP:
+        display_help_screen(screen)
+
     elif stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
         mountains.draw(screen)
         ground.draw(screen)
         pygame.draw.ellipse(screen, SUN, [800, 50, 100, 100])
         screen.blit(prince_img, [100, 560])
         fairy.draw(screen)
+
+        if not sound_on:
+            screen.blit(mute_img, [screen.get_rect().centerx-(mute_img.get_width()/2)+200, 15])
 
         for g in goblins:
             g.draw(screen)
@@ -363,7 +421,7 @@ while not done:
 
 
     # Remove killed objects
-    if stage != START:
+    if stage not in [START, HELP]:
         goblins = [g for g in goblins if g.alive]
         bullets = [b for b in bullets if b.alive]
         bombs = [b for b in bombs if b.alive]
