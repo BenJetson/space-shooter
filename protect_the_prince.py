@@ -20,6 +20,7 @@ PLAYING = 1
 PAUSED = 2
 DELAY = 3
 GAME_OVER = 4
+HELP  = 5
 
 
 # Window settings
@@ -136,12 +137,15 @@ def end_game():
     stage = GAME_OVER
 
 
+def draw_centered_mute():
+
+    if not sound_on:
+        screen.blit(mute_img, [screen.get_rect().centerx-(mute_img.get_width()/2), 15])
+
 def display_start_screen(screen, high_score):
 
     show_texts_centered(screen, start_texts)
-
-    if not sound_on:
-            screen.blit(mute_img, [screen.get_rect().centerx-(mute_img.get_width()/2), 15])
+    draw_centered_mute()
 
 def display_pause_screen(screen):
 
@@ -149,6 +153,10 @@ def display_pause_screen(screen):
 
 def display_end_screen(screen):
     show_texts_centered(screen, end_texts)
+
+def display_help_screen(screen):
+    show_texts_centered(screen, help_texts, yval_start=50, spacing=0)
+    draw_centered_mute()
 
 def display_stats(screen, score, level, high_score, shield):
     score_text = FONT_SM.render("SCORE: " + str(score), True, ORANGE)
@@ -183,15 +191,25 @@ start_texts.append(FONT_SM.render("HIGH SCORE: " + str(high_score), True, ORANGE
 
 ctrl_a = 0
 ctrl_a_prevstate = 0
+ctrl_x = 0
+ctrl_x_prevstate = 0
 
 def controller_button_fixer():
-    global ctrl_a_prevstate, ctrl_a
+    global ctrl_a_prevstate, ctrl_a, ctrl_x_prevstate, ctrl_x
 
     ctrl_a_currstate = controller.a()
 
     if ctrl_a_currstate != ctrl_a_prevstate:
         ctrl_a_prevstate = ctrl_a_currstate
         ctrl_a = ctrl_a_currstate
+
+    ctrl_x_currstate = controller.x()
+
+    if ctrl_x_currstate != ctrl_x_prevstate:
+        ctrl_x_prevstate = ctrl_x_currstate
+        ctrl_x = ctrl_x_currstate
+
+
 
 # Game loop
 done = False
@@ -208,6 +226,13 @@ while not done:
             if stage == START:
                 if event.key == pygame.K_SPACE:
                     setup()
+
+                if event.key == pygame.K_h:
+                    stage = HELP
+
+            elif stage == HELP:
+                if event.key == pygame.K_SPACE:
+                    stage = START
 
             elif stage == PLAYING:
                 if event.key == pygame.K_SPACE and len(bullets) < shot_limit:
@@ -245,9 +270,20 @@ while not done:
     if controllerConnected:
         controller_button_fixer()
 
+        if ctrl_x == 1:
+            toggle_sound()
+            ctrl_x = 0
+
         if stage == START:
             if controller.start() == 1:
                 setup()
+
+            if controller.y() == 1:
+                stage = HELP
+
+        elif stage == HELP:
+            if controller.back() == 1:
+                stage = START
 
         elif stage == PLAYING:
             if ctrl_a == 1 and len(bullets) < shot_limit:
@@ -347,6 +383,9 @@ while not done:
     if stage == START:
         display_start_screen(screen, high_score)
 
+    if stage == HELP:
+        display_help_screen(screen)
+
     elif stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
         mountains.draw(screen)
         ground.draw(screen)
@@ -381,7 +420,7 @@ while not done:
 
 
     # Remove killed objects
-    if stage != START:
+    if stage not in [START, HELP]:
         goblins = [g for g in goblins if g.alive]
         bullets = [b for b in bullets if b.alive]
         bombs = [b for b in bombs if b.alive]
