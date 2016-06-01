@@ -379,7 +379,7 @@ while not done:
                     score += g.value
                     hits += 1
                     if sound_on:
-                        HIT.play()
+                        random.choice(HIT).play()
 
             for u in level_ufos:
                 if b.intersects(u):
