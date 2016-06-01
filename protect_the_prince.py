@@ -190,6 +190,10 @@ def display_stats(screen, score, level, high_score, shield):
     show_texts_centered(screen, [score_text, high_score_text], 15, 0)
 
 
+def post_start():
+    pass
+
+
 def toggle_sound():
     global sound_on
 
@@ -259,6 +263,7 @@ while not done:
             if stage == START:
                 if event.key == pygame.K_SPACE:
                     setup()
+                    post_start()
 
                 if event.key == pygame.K_h:
                     stage = HELP
@@ -319,6 +324,7 @@ while not done:
 
         if stage == START:
             if controller.start() == 1:
+                post_start()
                 setup()
 
             if controller.y() == 1:
