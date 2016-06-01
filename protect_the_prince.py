@@ -7,7 +7,7 @@ pygame.init()  # Initializing here before loading other modules that depend on i
 import os
 import random
 from assets import *
-from sprites import Fairy, Goblin, Ground, SpaceShip
+from sprites import Fairy, Goblin, Ground, SpaceShip, PowerUpShield
 from scenery import Mountains
 
 # Stages
@@ -96,7 +96,7 @@ def start():
 
 
 def setup():
-    global goblins, bombs, bullets, stage, ticks, level_ufos
+    global goblins, bombs, bullets, stage, ticks, level_ufos, health_powerups
 
     goblins = [Goblin(400, 90, goblin_speed),
                Goblin(500, 90, goblin_speed),
@@ -108,6 +108,8 @@ def setup():
                Goblin(500, 190, goblin_speed),
                Goblin(600, 190, goblin_speed),
                Goblin(700, 190, goblin_speed)]
+
+    health_powerups = [PowerUpShield()]
 
     level_ufos = [SpaceShip()]
 
@@ -282,10 +284,12 @@ while not done:
 
                 elif event.key == pygame.K_p:
                     stage = PAUSED
+                    PAUSE_TIME = get_current_time()
 
             elif stage == PAUSED:
                 if event.key == pygame.K_p:
                     stage = PLAYING
+                    TIME_MOD += (get_current_time() - PAUSE_TIME)
 
             elif stage == GAME_OVER:
                 if event.key == pygame.K_r:
@@ -351,10 +355,12 @@ while not done:
 
             elif controller.back() == 1:
                 stage = PAUSED
+                PAUSE_TIME = get_current_time()
 
         elif stage == PAUSED:
             if controller.start() == 1:
                 stage = PLAYING
+                TIME_MOD += (get_current_time() - PAUSE_TIME)
 
         elif stage == GAME_OVER:
             if controller.start() == 1:
@@ -400,6 +406,13 @@ while not done:
 
         for u in level_ufos:
             u.update()
+
+        for h in health_powerups:
+            h.update()
+
+            if h.intersects(fairy):
+                fairy.shield = 100
+                h.kill()
 
         if fleet_hits_edge:
             for g in goblins:
@@ -482,6 +495,9 @@ while not done:
         for b in bombs:
             b.draw(screen)
 
+        for h in health_powerups:
+            h.draw(screen)
+
         if stage == PAUSED:
             display_pause_screen(screen)
         if stage == GAME_OVER:
@@ -499,6 +515,7 @@ while not done:
         bullets = [b for b in bullets if b.alive]
         bombs = [b for b in bombs if b.alive]
         level_ufos = [u for u in level_ufos if u.alive]
+        health_powerups = [h for h in health_powerups if h.alive]
 
 # Close window on quit
 pygame.quit()

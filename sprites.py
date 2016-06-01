@@ -156,14 +156,15 @@ class Bomb(SimpleSprite):
         self.move()
 
 
-class PowerUpHealth(SimpleSprite):
+class PowerUpShield(SimpleSprite):
     def __init__(self):
 
         x = random.randint(200, 800)
         y = -1 * random.randint(800, 1200)
-        self.vy = random.randint(1,6)
 
         super().__init__(x, y, shield_img)
+
+        self.vy = random.randint(1,6)
 
     def update(self):
         self.move()

@@ -1,4 +1,4 @@
-import pygame
+import pygame, calendar, time
 from xbox360_controller import XBox360Controller
 
 # Controller Config Stuff
@@ -31,7 +31,6 @@ FONT_MD = pygame.font.Font("fonts/boogaloo.ttf", 48)
 FONT_LG = pygame.font.Font("fonts/boogaloo.ttf", 64)
 FONT_XL = pygame.font.Font("fonts/boogaloo.ttf", 96)
 
-
 # Images
 cannon_img = pygame.image.load("img/ship.png")
 alien_img = pygame.image.load("img/bug.png")
@@ -42,11 +41,11 @@ bomb_img = pygame.image.load("img/bomb.png")
 fairy_img = pygame.image.load("img/fairy.png")
 prince_img = pygame.image.load("img/Prince.png")
 goblin_img = [pygame.image.load("img/goblin1.png"),
-                pygame.image.load("img/goblin2.png"),
-                pygame.image.load("img/goblin3.png"),
-                pygame.image.load("img/goblin4.png"),
-                pygame.image.load("img/goblin5.png"),
-                pygame.image.load("img/goblin6.png")]
+              pygame.image.load("img/goblin2.png"),
+              pygame.image.load("img/goblin3.png"),
+              pygame.image.load("img/goblin4.png"),
+              pygame.image.load("img/goblin5.png"),
+              pygame.image.load("img/goblin6.png")]
 
 mute_img = pygame.image.load("img/mute.png")
 ufo_img = pygame.image.load("img/ufo.png")
@@ -109,7 +108,7 @@ help_texts = [FONT_XL.render("HELP", True, ORANGE),
               FONT_XS.render("", True, ORANGE),
               FONT_XS.render("", True, ORANGE),
               FONT_XS.render(("The goal of the game is to shoot as many goblins as you can without " +
-                              "dying. To shoot goblins, press "+ control_text["fire"] + "."), True, ORANGE),
+                              "dying. To shoot goblins, press " + control_text["fire"] + "."), True, ORANGE),
               FONT_XS.render(("For each shot you make, you will lose one point. You can only " +
                               "have five bullets on-screen at any time."), True, ORANGE),
               FONT_XS.render("", True, ORANGE),
@@ -152,3 +151,12 @@ with open('README.txt', 'r') as file:
 backstory_texts.append(FONT_SM.render("", True, ORANGE))
 backstory_texts.append(FONT_SM.render(("Press " + control_text['dismiss backstory'] + " to dismiss this screen."),
                                       True, ORANGE))
+
+
+# Time Handling
+
+TIME_MOD = 0
+
+
+def get_current_time():
+    return calendar.timegm(time.gmtime()) - TIME_MOD
