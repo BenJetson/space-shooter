@@ -70,6 +70,7 @@ HIT = [pygame.mixer.Sound("sounds/goblin-1.ogg"),
        pygame.mixer.Sound("sounds/goblin-14.ogg"),
        pygame.mixer.Sound("sounds/goblin-15.ogg")]
 THEME = pygame.mixer.Sound("sounds/Fairy.ogg")
+OPENING = pygame.mixer.Sound("sounds/start.ogg")
 
 # Texts
 

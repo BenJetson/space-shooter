@@ -81,7 +81,7 @@ def save_high_score(score):
 
 
 def start():
-    global fairy, goblin_speed, bomb_rate, shot_limit, score, level, stage, shots, hits
+    global fairy, goblin_speed, bomb_rate, shot_limit, score, level, stage, shots, hits, sound_on
 
     fairy = Fairy(480, 540)
     goblin_speed = initial_alien_speed
@@ -94,6 +94,8 @@ def start():
     level = 1
     stage = START
 
+    if sound_on:
+        OPENING.play(loops =-1)
 
 def setup():
     global goblins, bombs, bullets, stage, ticks, level_ufos, health_powerups
@@ -118,9 +120,6 @@ def setup():
 
     ticks = delay_ticks
     stage = DELAY
-    if sound_on:
-        THEME.play(loops=-1)
-
 
 def advance():
     global level, goblin_speed, bomb_rate
@@ -137,6 +136,7 @@ def end_game():
 
     if sound_on:
         THEME.stop()
+        OPENING.play()
 
     stage = GAME_OVER
 
@@ -191,20 +191,30 @@ def display_stats(screen, score, level, high_score, shield):
 
 
 def post_start():
-    pass
+    OPENING.stop()
+    if sound_on:
+        THEME.play(loops=-1)
 
 
 def toggle_sound():
     global sound_on
 
-    if sound_on:
-        THEME.stop()
-        sound_on = False
-    elif not sound_on:
-        if stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
-            THEME.play(loops=-1)
-        sound_on = True
-
+    if stage == PLAYING:
+        if sound_on:
+            THEME.stop()
+            sound_on = False
+        elif not sound_on:
+            if stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
+                THEME.play(loops=-1)
+            sound_on = True
+    elif stage == START or HELP or BACKSTORY:
+        if sound_on:
+            OPENING.stop()
+            sound_on = False
+        elif not sound_on:
+            if stage in [START, HELP, BACKSTORY]:
+                OPENING.play(loops=-1)
+            sound_on = True
 
 # Make scenery objects
 ground = Ground(0, 560, 1000, 100)
