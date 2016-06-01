@@ -393,9 +393,9 @@ while not done:
             if g.x <= 0 or g.x + g.w >= WIDTH:
                 fleet_hits_edge = True
 
-            if g.intersects(fairy.get_rect()):
+            if g.intersects(fairy):
                 end_game()
-            elif g.intersects(ground.get_rect()):
+            elif g.intersects(ground):
                 end_game()
 
         for u in level_ufos:
