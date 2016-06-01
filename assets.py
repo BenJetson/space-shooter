@@ -54,9 +54,23 @@ start_img = pygame.image.load("img/start-bgd.png")
 shield_img = pygame.image.load("img/shield.png")
 
 # Sounds
-SHOT = pygame.mixer.Sound("sounds/shot.ogg")
-HIT = pygame.mixer.Sound("sounds/hit.ogg")
-THEME = pygame.mixer.Sound("sounds/take_a_chance.ogg")
+SHOT = pygame.mixer.Sound("sounds/shoot.ogg")
+HIT = [pygame.mixer.Sound("sounds/goblin-1.ogg"),
+       pygame.mixer.Sound("sounds/goblin-2.ogg"),
+       pygame.mixer.Sound("sounds/goblin-3.ogg"),
+       pygame.mixer.Sound("sounds/goblin-4.ogg"),
+       pygame.mixer.Sound("sounds/goblin-5.ogg"),
+       pygame.mixer.Sound("sounds/goblin-6.ogg"),
+       pygame.mixer.Sound("sounds/goblin-7.ogg"),
+       pygame.mixer.Sound("sounds/goblin-8.ogg"),
+       pygame.mixer.Sound("sounds/goblin-9.ogg"),
+       pygame.mixer.Sound("sounds/goblin-10.ogg"),
+       pygame.mixer.Sound("sounds/goblin-11.ogg"),
+       pygame.mixer.Sound("sounds/goblin-12.ogg"),
+       pygame.mixer.Sound("sounds/goblin-13.ogg"),
+       pygame.mixer.Sound("sounds/goblin-14.ogg"),
+       pygame.mixer.Sound("sounds/goblin-15.ogg")]
+THEME = pygame.mixer.Sound("sounds/Fairy.ogg")
 
 # Texts
 
