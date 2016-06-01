@@ -85,7 +85,7 @@ class Fairy(SimpleSprite):
         self.shield = 100
 
     def shoot(self, bullets, vy):
-        x = self.x + self.w / 2 - bullet_img.get_width() / 2
+        x = self.x + self.w / 2 - random.choice(bullet_img).get_width() / 2
         y = self.y
 
         b = Bullet(x, y, vy)
@@ -136,7 +136,7 @@ class Goblin(SimpleSprite):
 class Bullet(SimpleSprite):
 
     def __init__(self, x, y, vy):
-        super().__init__(x, y, bullet_img)
+        super().__init__(x, y, random.choice(bullet_img))
 
         self.vy = vy
 

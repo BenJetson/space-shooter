@@ -34,7 +34,9 @@ FONT_XL = pygame.font.Font("fonts/boogaloo.ttf", 96)
 # Images
 cannon_img = pygame.image.load("img/ship.png")
 alien_img = pygame.image.load("img/bug.png")
-bullet_img = pygame.image.load("img/bullet.png")
+bullet_img = [pygame.image.load("img/bullet.png"),
+              pygame.image.load("img/bullet1.png"),
+              pygame.image.load("img/bullet2.png")]
 bomb_img = pygame.image.load("img/bomb.png")
 fairy_img = pygame.image.load("img/fairy.png")
 prince_img = pygame.image.load("img/Prince.png")
