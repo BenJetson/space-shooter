@@ -17,6 +17,7 @@ PAUSED = 2
 DELAY = 3
 GAME_OVER = 4
 HELP = 5
+BACKSTORY = 6
 
 # Window settings
 WIDTH = 1000
@@ -170,6 +171,11 @@ def display_help_screen(screen):
     draw_centered_mute()
 
 
+def display_backstory_screen(screen):
+    show_texts_centered(screen, backstory_texts, yval_start=50, spacing=0)
+    draw_centered_mute()
+
+
 def display_stats(screen, score, level, high_score, shield):
     score_text = FONT_SM.render("SCORE: " + str(score), True, ORANGE)
     level_text = FONT_SM.render("LEVEL:" + str(level), True, ORANGE)
@@ -189,7 +195,8 @@ def toggle_sound():
         THEME.stop()
         sound_on = False
     elif not sound_on:
-        THEME.play(loops=-1)
+        if stage in [PLAYING, PAUSED, DELAY, GAME_OVER]:
+            THEME.play(loops=-1)
         sound_on = True
 
 
@@ -207,10 +214,12 @@ ctrl_a = 0
 ctrl_a_prevstate = 0
 ctrl_x = 0
 ctrl_x_prevstate = 0
+trigger_right = 0
+trigger_right_prevstate = 0
 
 
 def controller_button_fixer():
-    global ctrl_a_prevstate, ctrl_a, ctrl_x_prevstate, ctrl_x
+    global ctrl_a_prevstate, ctrl_a, ctrl_x_prevstate, ctrl_x, trigger_right, trigger_right_prevstate
 
     ctrl_a_currstate = controller.a()
 
@@ -223,6 +232,15 @@ def controller_button_fixer():
     if ctrl_x_currstate != ctrl_x_prevstate:
         ctrl_x_prevstate = ctrl_x_currstate
         ctrl_x = ctrl_x_currstate
+
+    if controller.triggers() > 0.25:
+        trigger_right_currstate = 1
+    else:
+        trigger_right_currstate = 0
+
+    if trigger_right_currstate != trigger_right_prevstate:
+        trigger_right_prevstate = trigger_right_currstate
+        trigger_right = trigger_right_currstate
 
 
 # Game loop
@@ -243,7 +261,14 @@ while not done:
                 if event.key == pygame.K_h:
                     stage = HELP
 
+                if event.key == pygame.K_b:
+                    stage = BACKSTORY
+
             elif stage == HELP:
+                if event.key == pygame.K_SPACE:
+                    stage = START
+
+            elif stage == BACKSTORY:
                 if event.key == pygame.K_SPACE:
                     stage = START
 
@@ -295,6 +320,13 @@ while not done:
             if controller.y() == 1:
                 stage = HELP
 
+            if controller.b() == 1:
+                stage = BACKSTORY
+
+        elif stage == BACKSTORY:
+            if controller.back() == 1:
+                stage = START
+
         elif stage == HELP:
             if controller.back() == 1:
                 stage = START
@@ -304,6 +336,16 @@ while not done:
                 if sound_on:
                     SHOT.play()
                 fairy.shoot(bullets, -bullet_speed)
+                shots += 1
+                score -= 1
+                ctrl_a = 0
+
+            elif trigger_right == 1 and len(bullets) < shot_limit:
+                if sound_on:
+                    SHOT.play()
+                fairy.shoot(bullets, -bullet_speed)
+                trigger_right = 0
+                shots += 1
                 score -= 1
                 ctrl_a = 0
 
@@ -406,6 +448,9 @@ while not done:
         screen.blit(start_img, [0, 0])
         display_start_screen(screen, high_score)
 
+    if stage == BACKSTORY:
+        display_backstory_screen(screen)
+
     if stage == HELP:
         display_help_screen(screen)
 
@@ -443,7 +488,7 @@ while not done:
     clock.tick(refresh_rate)
 
     # Remove killed objects
-    if stage not in [START, HELP]:
+    if stage not in [START, HELP, BACKSTORY]:
         goblins = [g for g in goblins if g.alive]
         bullets = [b for b in bullets if b.alive]
         bombs = [b for b in bombs if b.alive]

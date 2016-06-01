@@ -25,6 +25,7 @@ SUN = (244, 252, 0)
 
 # Fonts
 FONT_XS = pygame.font.Font("fonts/boogaloo.ttf", 18)
+FONT_LS = pygame.font.Font("fonts/boogaloo.ttf", 24)
 FONT_SM = pygame.font.Font("fonts/boogaloo.ttf", 32)
 FONT_MD = pygame.font.Font("fonts/boogaloo.ttf", 48)
 FONT_LG = pygame.font.Font("fonts/boogaloo.ttf", 64)
@@ -65,22 +66,26 @@ if controllerConnected:
         "directional": "left analog stick",
         "resume game": "START",
         "restart game": "START",
-        "fire": "A",
+        "fire": "A or RIGHT TRIGGER",
         "sound toggle": "X",
         "get help": "Y",
-        "dismiss help": "BACK"
+        "dismiss help": "BACK",
+        "see backstory": "B",
+        "dismiss backstory": "BACK"
     }
 else:
     control_text = {
         "start game": "SPACE",
         "pause game": "'p'",
-        "directional": "arrow keyk",
+        "directional": "arrow keys",
         "restart game": "'r'",
         "resume game": "SPACE",
         "fire": "SPACE",
         "sound toggle": "'s'",
         "get help": "'h'",
-        "dismiss help": "SPACE"
+        "dismiss help": "SPACE",
+        "see backstory": "'b'",
+        "dismiss backstory": "SPACE"
     }
 
 help_texts = [FONT_XL.render("HELP", True, ORANGE),
@@ -116,7 +121,19 @@ pause_texts = [FONT_MD.render("GAME PAUSED", True, ORANGE),
 
 start_texts = [FONT_MD.render(TITLE, True, YELLOW),
                FONT_SM.render(("Press " + control_text["start game"] + " to start."), True, YELLOW),
+               FONT_XS.render(("Press " + control_text["see backstory"] + " to see the backstory."), True, YELLOW),
                FONT_XS.render(("Press " + control_text["get help"] + " to get help."), True, YELLOW)]
 
 end_texts = [FONT_XL.render("GAME OVER!", True, RED),
              FONT_MD.render(("Press " + control_text["restart game"] + " to restart"), True, RED)]
+
+# Backstory Loading
+backstory_texts = [FONT_LG.render("The Backstory", True, ORANGE), FONT_SM.render("", True, ORANGE)]
+
+with open('README.txt', 'r') as file:
+    for line in file.read().splitlines():
+        backstory_texts.append(FONT_LS.render(line, True, ORANGE))
+
+backstory_texts.append(FONT_SM.render("", True, ORANGE))
+backstory_texts.append(FONT_SM.render(("Press " + control_text['dismiss backstory'] + " to dismiss this screen."),
+                                      True, ORANGE))
