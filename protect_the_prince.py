@@ -7,7 +7,7 @@ pygame.init()  # Initializing here before loading other modules that depend on i
 import os
 import random
 from assets import *
-from sprites import Fairy, Goblin, Ground, SpaceShip, PowerUpShield
+from sprites import Fairy, Goblin, Ground, SpaceShip, PowerUpShield, PowerUpInvincible
 from scenery import Mountains
 
 # Stages
@@ -98,7 +98,7 @@ def start():
         OPENING.play(loops =-1)
 
 def setup():
-    global goblins, bombs, bullets, stage, ticks, level_ufos, health_powerups
+    global goblins, bombs, bullets, stage, ticks, level_ufos, health_powerups, invincible_powerups
 
     goblins = [Goblin(400, 90, goblin_speed),
                Goblin(500, 90, goblin_speed),
@@ -112,6 +112,7 @@ def setup():
                Goblin(700, 190, goblin_speed)]
 
     health_powerups = [PowerUpShield()]
+    invincible_powerups = [PowerUpInvincible()]
 
     level_ufos = [SpaceShip()]
 
@@ -430,6 +431,13 @@ while not done:
                 fairy.shield = 100
                 h.kill()
 
+        for i in invincible_powerups:
+            i.update()
+
+            if i.intersects(fairy):
+                fairy.invincibility = get_current_time() + 5
+
+
         if fleet_hits_edge:
             for g in goblins:
                 g.reverse_and_drop(drop_amount)
@@ -513,6 +521,12 @@ while not done:
 
         for h in health_powerups:
             h.draw(screen)
+
+        for i in invincible_powerups:
+            i.draw(screen)
+
+        if fairy.invincibility > get_current_time():
+            screen.blit(shield_invincible_img, [100,100])
 
         if stage == PAUSED:
             display_pause_screen(screen)

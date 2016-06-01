@@ -46,6 +46,7 @@ goblin_img = [pygame.image.load("img/goblin1.png"),
               pygame.image.load("img/goblin4.png"),
               pygame.image.load("img/goblin5.png"),
               pygame.image.load("img/goblin6.png")]
+shield_invincible_img = pygame.image.load("img/shield_invincible.png")
 
 mute_img = pygame.image.load("img/mute.png")
 ufo_img = pygame.image.load("img/ufo.png")

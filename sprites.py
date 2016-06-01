@@ -83,6 +83,7 @@ class Fairy(SimpleSprite):
         
         self.alive = True
         self.shield = 100
+        self.invincibility = 0
 
     def shoot(self, bullets, vy):
         x = self.x + self.w / 2 - random.choice(bullet_img).get_width() / 2
@@ -92,7 +93,8 @@ class Fairy(SimpleSprite):
         bullets.append(b)
 
     def apply_damage(self, amount):
-        self.shield -= amount
+        if get_current_time() > self.invincibility:
+            self.shield -= amount
 
     def check_screen_edges(self):
         if self.x < 0:
@@ -163,6 +165,20 @@ class PowerUpShield(SimpleSprite):
         y = -1 * random.randint(800, 1200)
 
         super().__init__(x, y, shield_img)
+
+        self.vy = random.randint(1,6)
+
+    def update(self):
+        self.move()
+
+
+class PowerUpInvincible(SimpleSprite):
+    def __init__(self):
+
+        x = random.randint(200, 800)
+        y = -1 * random.randint(800, 1200)
+
+        super().__init__(x, y, shield_invincible_img)
 
         self.vy = random.randint(1,6)
 
