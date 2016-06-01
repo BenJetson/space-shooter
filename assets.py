@@ -46,6 +46,8 @@ goblin_img = [pygame.image.load("img/goblin1.png"),
                 pygame.image.load("img/goblin6.png")]
 
 mute_img = pygame.image.load("img/mute.png")
+ufo_img = pygame.image.load("img/ufo.png")
+start_img = pygame.image.load("img/start-bgd.png")
 
 # Sounds
 SHOT = pygame.mixer.Sound("sounds/shot.ogg")
@@ -110,9 +112,9 @@ help_texts = [FONT_XL.render("HELP", True, ORANGE),
 pause_texts = [FONT_MD.render("GAME PAUSED", True, ORANGE),
                FONT_SM.render(("Press " + control_text['resume game'] + " to resume."), True, ORANGE)]
 
-start_texts = [FONT_MD.render(TITLE, True, ORANGE),
-               FONT_SM.render(("Press " + control_text["start game"] + " to start."), True, ORANGE),
-               FONT_XS.render(("Press " + control_text["get help"] + " to get help."), True, ORANGE)]
+start_texts = [FONT_MD.render(TITLE, True, YELLOW),
+               FONT_SM.render(("Press " + control_text["start game"] + " to start."), True, YELLOW),
+               FONT_XS.render(("Press " + control_text["get help"] + " to get help."), True, YELLOW)]
 
 end_texts = [FONT_XL.render("GAME OVER!", True, RED),
              FONT_MD.render(("Press " + control_text["restart game"] + " to restart"), True, RED)]
