@@ -425,6 +425,7 @@ while not done:
 
             for u in level_ufos:
                 if b.intersects(u):
+                    b.kill()
                     u.kill()
                     score += u.value
 
