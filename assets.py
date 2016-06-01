@@ -51,6 +51,7 @@ goblin_img = [pygame.image.load("img/goblin1.png"),
 mute_img = pygame.image.load("img/mute.png")
 ufo_img = pygame.image.load("img/ufo.png")
 start_img = pygame.image.load("img/start-bgd.png")
+shield_img = pygame.image.load("img/shield.png")
 
 # Sounds
 SHOT = pygame.mixer.Sound("sounds/shot.ogg")
